@@ -8,9 +8,9 @@
 	+ 服务端部署：Ubuntu、nginx、uwsgi
 
 + 参与开发人员：
-	+ 前端：朱思佳、李佳豪
-	+ 后端：孙明明、李启蒙
-	+ 负责人：郭吉航
+	+ 前端：xxx、xxx
+	+ 后端：xxx、xxx
+	+ 负责人：xxx
 
 + [项目代码仓库地址](https://github.com/ZypcGroup/Bank-manage/tree/bu)
 
