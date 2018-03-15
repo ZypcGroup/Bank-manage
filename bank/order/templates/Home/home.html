@@ -7,26 +7,29 @@
     <link rel="stylesheet" href="../static/css/layui.css">
     <script src="../static/jquery-3.2.1.js"></script>
     <script type="text/javascript">
-//        window.onload = function (data) {
-//            $.ajax({
-//                url:"",
-//                type:"POST",
-//                data:{
-//                    name : data.field.username,
-//                },
-//                success:function(data){layer.alert("success")},
-//                error:function(data){layer.open("不存在此用户", {icon: 1})}
-//            });
-//        }
-        window.onload = function () {
-            layer.alert('不存在此用户'})
+        window.onload = function (data) {
+            $.ajax({
+                url:"",
+                type:"POST",
+                data:{
+                    name : data.field.username,
+                },
+                success:function(data){layer.alert("success")},
+                error:function(data){layer.open("不存在此用户", {icon: 1})}
+            });
         }
     </script>
+    <style>
+        .left_nav{
+            position: relative;
+            left: 40px;
+        }
+    </style>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo">Logo图片</div>
+        <div class="layui-logo"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe62e;</i>  </div>
 
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item" id="username">
@@ -50,16 +53,16 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree  layui-bg-cyan "  lay-filter="test">
                 <li class="layui-nav-item layui-nav-itemed layui-this">
-                    <a href="item1.html" target="menuFrame">表单模块</a>
+                    <a href="item1.html" target="menuFrame" class="left_navbar"><i class="layui-icon" style="font-size: 20px; color: #dddddd;position: relative;left: 20px;top: 1px;">&#xe63c;</i><span class="left_nav">表单模块</span></a>
                 </li>
                 <li class="layui-nav-item layui-nav-itemed" id="search">
-                    <a href="item2.html" target="menuFrame">查询模块</a>
+                    <a href="item2.html" target="menuFrame" class="left_navbar"><i class="layui-icon" style="font-size: 20px; color: #dddddd;position: relative;left: 20px;top: 1px;">&#xe615;</i><span class="left_nav">查询模块</span></a>
                 </li>
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a href="item3.html" target="menuFrame">设置模块</a>
+                    <a href="item3.html" target="menuFrame" class="left_navbar"><i class="layui-icon" style="font-size: 20px; color: #dddddd;position: relative;left: 20px;top: 1px;">&#xe620;</i><span class="left_nav">设置模块</span></a>
                 </li>
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a href="item4.html" target="menuFrame">数据可视化</a>
+                    <a href="item4.html" target="menuFrame" class="left_navbar"><i class="layui-icon" style="font-size: 20px; color: #dddddd;position: relative;left: 20px;top: 1px;">&#xe609;</i><span class="left_nav">数据导出</span></a>
                 </li>
             </ul>
         </div>
