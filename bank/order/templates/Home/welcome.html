@@ -5,6 +5,12 @@
     <title>Title</title>
 </head>
 <body>
-<p>Hello,world</p>
+<div id="main">
+
+</div>
+<script>
+    var username = document.getElementById("username").textContent;
+    document.getElementById('main').innerHTML = "Welcome"+ username;
+</script>
 </body>
 </html>
