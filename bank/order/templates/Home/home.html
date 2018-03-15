@@ -17,7 +17,7 @@
                 console.log(height);
             }catch (ex){}
         }
-        window.setInterval("reinitIframe()", 200);
+        window.setInterval("reinitIframe()", 200);//iframe宽高自适应
     </script>
 </head>
 <body class="layui-layout-body">
@@ -77,14 +77,6 @@
         var form = layui.form;
 
         //各种基于事件的操作，下面会有进一步介绍
-    });
-    layui.use('layer', function(){
-        var layer = layui.layer;
-        layer.open({
-            type: 2,
-            content: 'item1.html'
-            area: ['500px', '300px']
-        });
     });
 </script>
 </body>
