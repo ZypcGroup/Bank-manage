@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>银行管理系统</title>
     <link rel="stylesheet" href="../static/css/layui.css">
+    <script src="../static/jquery-3.2.1.js"></script>
     <script type="text/javascript">
         function reinitIframe(){
             var iframe = document.getElementById("test");
@@ -18,13 +19,6 @@
         }
         window.setInterval("reinitIframe()", 200);
     </script>
-    <style>
-        #test{
-            position: absolute;
-            top: 50px;
-            left: 310px;
-        }
-    </style>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -49,39 +43,33 @@
     <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+            <ul class="layui-nav layui-nav-tree  layui-bg-cyan "  lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed layui-this">
+                    <a href="item1.html" target="menuFrame">表单模块</a>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed" id="search">
+                    <a href="item2.html" target="menuFrame">查询模块</a>
+                </li>
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;">表单模块</a>
+                    <a href="item3.html" target="menuFrame">设置模块</a>
                 </li>
-                <li class="layui-nav-item" >
-                    <a href="javascript:;">查询模块</a>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="item4.html"  target="menuFrame">数据可视化</a>
                 </li>
-                <li class="layui-nav-item"><a href="">设置模块</a></li>
-                <li class="layui-nav-item"><a href="">数据可视化</a></li>
             </ul>
         </div>
     </div>
 
-    <div class="layui-body layui-show">
-        <iframe id="test" class="page-ifream" name="one" src="item1.html" width="450" height="500" frameborder="0" scrolling="yes" align="middle"></iframe>
+    <div class="layui-body">
+        <iframe id="menuFrame" class="page-ifream" name="menuFrame" src="welcome.html" width="100%" height="100%" frameborder="0" scrolling="yes" align="middle"></iframe>
     </div>
-    <div class="layui-tab-item">
-        <iframe id="test" class="page-ifream" name="one" src="item2.html" width="450" height="500" frameborder="0" scrolling="yes" align="middle"></iframe>
-    </div>
-    <div class="layui-tab-item">
-        <iframe id="test" class="page-ifream" name="one" src="item3.html" width="450" height="500" frameborder="0" scrolling="yes" align="middle"></iframe>
-    </div>
-    <div class="layui-tab-item">
-        <iframe id="test" class="page-ifream" name="one" src="item4.html" width="450" height="500" frameborder="0" scrolling="yes" align="middle"></iframe>
-    </div>
-    <div class="layui-tab-item">
-        <iframe id="test" class="page-ifream" name="one" src="item1.html" width="450" height="500" frameborder="0" scrolling="yes" align="middle"></iframe>
-    </div>
+
 
     <div class="layui-footer">
         <!-- 底部固定区域 -->
         © layui.com - 底部固定区域
     </div>
+
 </div>
 <script src="../static/layui.all.js"></script>
 <script>
@@ -89,6 +77,14 @@
         var form = layui.form;
 
         //各种基于事件的操作，下面会有进一步介绍
+    });
+    layui.use('layer', function(){
+        var layer = layui.layer;
+        layer.open({
+            type: 2,
+            content: 'item1.html'
+            area: ['500px', '300px']
+        });
     });
 </script>
 </body>
