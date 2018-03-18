@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>form表单提交</title>
+    <link rel="stylesheet" href="../static/css/layui.css" media="all">
+    <style>
+        form{
+            position: absolute;
+            top:50px;
+            left: 300px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form layui-form-pane" id="form_add">
+    <div class="layui-form-item">
+        <label class="layui-form-label">发生时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="time"  class="layui-input" id="date" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">风险类别</label>
+        <div class="layui-input-block">
+            <select name="danger" lay-verify="required">
+                <option value="">请选择</option>
+                <optgroup label="外部">
+                    <option value="one">欺诈</option>
+                    <option value="two">客户产品和业务活动</option>
+                    <option value="three">执行配送和管理流程</option>
+                    <option value="four">内外勾结欺诈</option>
+                </optgroup>
+                <optgroup label="内部">
+                    <option value="five">产品缺陷</option>
+                    <option value="six">不正当业务及市场活动</option>
+                    <option value="seven">执行配送和管理流程</option>
+                    <option value="eight">欺诈和偷盗</option>
+                </optgroup>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">业务线</label>
+        <div class="layui-input-block">
+            <select name="thing" lay-verify="required">
+                <option value="">请选择</option>
+                <option value="one">公司财务</option>
+                <option value="two">支付与结算</option>
+                <option value="three">高业性银行</option>
+                <option value="four">代理服务</option>
+                <option value="five">销售与交易</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">金额</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input name="money" placeholder="￥" autocomplete="off" class="layui-input" type="text" lay-verify="required">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" type="level">风险评级</label>
+        <div class="layui-input-block">
+            <select name="level" lay-verify="required">
+                <option value="">请选择</option>
+                <option value="one">一级</option>
+                <option value="two">二级</option>
+                <option value="three">三级</option>
+                <option value="four">四级</option>
+                <option value="five">五级</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea name="desc" lay-verify="desc" placeholder="请输入内容" class="layui-textarea" maxlength="255" minlength="1"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">操作人</label>
+        <div class="layui-input-block">
+            <input class="layui-input" id="user" disabled>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn " lay-submit lay-filter="formSub">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+
+</form>
+<!--引入layui文件-->
+<script src="../static/layui.all.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/core.js"></script>
+<script>
+    var mydate = document.getElementById("date");
+    var date = new Date();
+    var mon = date.getMonth() + 1;
+    var day = date.getDate();
+    var nowdate = date.getFullYear() + "-" + (mon<10?"0"+mon:mon) + "-" +(day<10?"0"+day:day);
+    mydate.setAttribute("value",nowdate);
+
+    var user = document.getElementById("user");
+    var customer = document.getElementById("username").textContent;
+    user.setAttribute("value",customer)
+</script>
+<script>
+        var form = layui.form;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        //自定义验证规则
+        form.verify({
+            desc: function(value){
+                if(value.length < 1){
+                    return '您还没有填写描述内容';
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(formSub)',function(data){
+
+            layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            });
+
+            $.ajax({
+                url:"/api/form"
+                type:"POST",
+                dataType:"json",
+                data: $('#form_add').serialize(),
+
+                success:function(data){
+                    if(data.status=="0")
+                    {
+                        layer.alert("提交成功");
+                    }
+                    else if(data.status=="1")
+                    {
+                        layer.alert("服务器繁忙，请稍等");
+                    }
+                },
+                error:function(){
+                    layer.alert("提交失败");
+                }
+
+            });
+
+            return false;
+        });
+console.log()
+</script>
+
+</body>

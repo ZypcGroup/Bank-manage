@@ -55,6 +55,9 @@
                    
                 });
                 $.ajax({url:'/api/form',type:'POST',data:{type:"2",lid:data.id}})
+
+                location.href='../item/submit.html';
+
             }
             else if(layevent==='del')
             {

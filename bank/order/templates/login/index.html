@@ -57,17 +57,15 @@
                 name : data.field.username,
                 password : data.field.password
                 },
-
             success:function(data){
                 if(data.status=="0")
                 {
-                    //layer.alert("登录成功");
-                    //location.href='';       //登录成功后跳转
+                    layer.alert("登录成功");
+                    location.href = "../Home/home.html";       //登录成功后跳转
                 }
                 else if(data.status=="1")
                 {
                     layer.alert(data.msg);
-
                 }
             },
             error:function(){
