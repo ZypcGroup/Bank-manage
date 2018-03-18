@@ -13,11 +13,11 @@
     </style>
 </head>
 <body>
-<form class="layui-form">
+<form class="layui-form layui-form-pane" id="form_add">
     <div class="layui-form-item">
         <label class="layui-form-label">发生时间</label>
         <div class="layui-input-block">
-            <input type="text" name="date"  class="layui-input" id="date" disabled>
+            <input type="text" name="time"  class="layui-input" id="date" disabled>
         </div>
     </div>
     <div class="layui-form-item">
@@ -55,21 +55,12 @@
         </div>
     </div>
 
-    <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">描述</label>
-        <div class="layui-input-block">
-            <textarea name="desc" lay-verify="desc" placeholder="请输入内容" class="layui-textarea" maxlength="255" minlength="1"></textarea>
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label" >金额</label>
-        <div class="layui-input-inline" style="width: 100px;">
-            <input name="price_min" lay-verify="required" placeholder="￥" autocomplete="off" class="layui-input" type="text">
-        </div>
-        <div class="layui-form-mid">-</div>
-        <div class="layui-input-inline" style="width: 100px;">
-            <input name="price_max" lay-verify="required" placeholder="￥" autocomplete="off" class="layui-input" type="text">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">金额</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input name="money" placeholder="￥" autocomplete="off" class="layui-input" type="text" lay-verify="required">
+            </div>
         </div>
     </div>
 
@@ -84,6 +75,13 @@
                 <option value="four">四级</option>
                 <option value="five">五级</option>
             </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea name="desc" lay-verify="desc" placeholder="请输入内容" class="layui-textarea" maxlength="255" minlength="1"></textarea>
         </div>
     </div>
 
@@ -120,6 +118,7 @@
 <script>
         var form = layui.form;
         var layer = layui.layer;
+        var $ = layui.jquery;
         //自定义验证规则
         form.verify({
             desc: function(value){
@@ -131,18 +130,16 @@
 
         //监听提交
         form.on('submit(formSub)',function(data){
+
+            layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            });
+
             $.ajax({
-                url:"/api/form",
+                url:"../data.txt/"
                 type:"POST",
                 dataType:"json",
-                data:{
-                    danger : data.field.value,
-                    thing : data.field.value,
-                    desc : data.field.value,
-                    money : data.field.value,
-                    level : data.field.value,
-                    type : data.field.value
-                },
+                data: $('#form_add').serialize(),
 
                 success:function(data){
                     if(data.status=="0")
@@ -162,7 +159,7 @@
 
             return false;
         });
-
+console.log()
 </script>
 
 </body>
