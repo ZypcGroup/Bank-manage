@@ -15,14 +15,28 @@
 <body>
 <form class="layui-form">
     <div class="layui-form-item">
+        <label class="layui-form-label">发生时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="date"  class="layui-input" id="date" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">风险类别</label>
         <div class="layui-input-block">
-            <select name="danger">
-                <option value="one">政治风险</option>
-                <option value="two">社会风险</option>
-                <option value="three">经济风险</option>
-                <option value="four">自然风险</option>
-                <option value="five">技术风险</option>
+            <select name="danger" lay-verify="required">
+                <option value="">请选择</option>
+                <optgroup label="外部">
+                    <option value="one">欺诈</option>
+                    <option value="two">客户产品和业务活动</option>
+                    <option value="three">执行配送和管理流程</option>
+                    <option value="four">内外勾结欺诈</option>
+                </optgroup>
+                <optgroup label="内部">
+                    <option value="five">产品缺陷</option>
+                    <option value="six">不正当业务及市场活动</option>
+                    <option value="seven">执行配送和管理流程</option>
+                    <option value="eight">欺诈和偷盗</option>
+                </optgroup>
             </select>
         </div>
     </div>
@@ -30,10 +44,13 @@
     <div class="layui-form-item">
         <label class="layui-form-label">业务线</label>
         <div class="layui-input-block">
-            <select name="thing">
-                <option value="one">负债业务</option>
-                <option value="two">资产业务</option>
-                <option value="three">中间业务</option>
+            <select name="thing" lay-verify="required">
+                <option value="">请选择</option>
+                <option value="one">公司财务</option>
+                <option value="two">支付与结算</option>
+                <option value="three">高业性银行</option>
+                <option value="four">代理服务</option>
+                <option value="five">销售与交易</option>
             </select>
         </div>
     </div>
@@ -59,7 +76,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label" type="level">风险评级</label>
         <div class="layui-input-block">
-            <select name="level" lay-filter="pingji">
+            <select name="level" lay-verify="required">
+                <option value="">请选择</option>
                 <option value="one">一级</option>
                 <option value="two">二级</option>
                 <option value="three">三级</option>
@@ -70,33 +88,38 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">编辑类型</label>
+        <label class="layui-form-label">操作人</label>
         <div class="layui-input-block">
-            <select name="type">
-                <option value="0">增加</option>
-                <option value="1">修改</option>
-                <option value="2">删除</option>
-            </select>
+            <input class="layui-input" id="user" disabled>
         </div>
     </div>
 
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn " lay-submit lay-filter="*">立即提交</button>
+            <button class="layui-btn " lay-submit lay-filter="formSub">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
 
 </form>
-
 <!--引入layui文件-->
 <script src="../static/layui.all.js"></script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/core.js"></script>
+<script>
+    var mydate = document.getElementById("date");
+    var date = new Date();
+    var mon = date.getMonth() + 1;
+    var day = date.getDate();
+    var nowdate = date.getFullYear() + "-" + (mon<10?"0"+mon:mon) + "-" +(day<10?"0"+day:day);
+    mydate.setAttribute("value",nowdate);
 
+    var user = document.getElementById("user");
+    var customer = document.getElementById("username").textContent;
+    user.setAttribute("value",customer)
+</script>
 <script>
         var form = layui.form;
         var layer = layui.layer;
-
         //自定义验证规则
         form.verify({
             desc: function(value){
@@ -107,10 +130,36 @@
         });
 
         //监听提交
-        form.on('submit(demo1)', function(data){
-            layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
-            })
+        form.on('submit(formSub)',function(data){
+            $.ajax({
+                url:"/api/form",
+                type:"POST",
+                dataType:"json",
+                data:{
+                    danger : data.field.value,
+                    thing : data.field.value,
+                    desc : data.field.value,
+                    money : data.field.value,
+                    level : data.field.value,
+                    type : data.field.value
+                },
+
+                success:function(data){
+                    if(data.status=="0")
+                    {
+                        layer.alert("提交成功");
+                    }
+                    else if(data.status=="1")
+                    {
+                        layer.alert("服务器繁忙，请稍等");
+                    }
+                },
+                error:function(){
+                    layer.alert("404");
+                }
+
+            });
+
             return false;
         });
 
