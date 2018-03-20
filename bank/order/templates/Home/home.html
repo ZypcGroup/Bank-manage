@@ -6,7 +6,6 @@
     <title>银行管理系统</title>
     <link rel="stylesheet" href="../static/css/layui.css">
     <!--<script src="../static/jquery-3.2.1.js"></script>-->
-
     <style>
         .left_nav{
             position: relative;
@@ -23,14 +22,8 @@
             <li class="layui-nav-item" id="username">
                 <a href="javascript:;">
                     <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                    <span id="right_username">朱思佳</span>
+
                 </a>
-                <dl class="layui-nav-child">
-                    <dd><a href="">基本资料</a></dd>
-                    <dd><a href="">修改密码</a></dd>
-                    <dd><a href="">更换皮肤</a></dd>
-                    <dd><a href="">安全设置</a></dd>
-                </dl>
             </li>
             <li class="layui-nav-item"><a href="../login/index.html">退出登录</a></li>
         </ul>
@@ -70,11 +63,16 @@
 <script src="../static/layui.all.js"></script>
 <script type="text/javascript">
         var $ = layui.jquery;
-        layer.msg('Hello Worlsd');
-            $.ajax({
-                url:"/api/check",
-                type:"POST"
-            })
+        //引入jQuery
+        $.ajax({
+            url: "/api/check",
+            type: "POST",
+            data : {},
+            success : function () {
+                document.getElementById("username").innerHTML = data.data.username;
+                console.log(data.data.username)
+            }
+        });
 
 </script>
 </body>

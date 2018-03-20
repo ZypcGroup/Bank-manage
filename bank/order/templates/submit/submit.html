@@ -114,10 +114,8 @@
     //user.setAttribute("value",customer)
 </script>
 <script>
-        console.log(layui);
         var form = layui.form;
         var $ = layui.jquery;
-
         //自定义验证规则
         layui.form.verify({
             desc: function(value){
@@ -140,14 +138,16 @@
                 url: "/api/form",
                 type: "POST",
                 dataType: "json",
-                data: {
+                data : {
                     danger: data.danger,
                     thing: data.thing,
                     desc: data.desc,
                     money: data.money,
                     level: data.level,
                     type: data.type
-                }
+                },
+                success : function () {layer.msg("提交成功")},
+                error : function(){layer.msg("提交失败")}
             })
         })
 
