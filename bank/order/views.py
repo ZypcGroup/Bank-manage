@@ -286,29 +286,148 @@ def form(request):
         return HttpResponse(re,content_type="application/json")
 
 
+# 李启蒙接口部分代码
+def login(request):
+    return render(request, 'index.html')
 
+def api_login(request):
+    '''
+        用户登录接口
+        0. 判断请求
+        1. 接收用户数据
+        2. 操作数据库数据
+        3. 进行数据验证
+        4. 逻辑判断，若是则跳转至管理页面，若不是则跳转至登陆页面
+    '''
+    judge = request.is_ajax()
+    if judge:# 登陆是ajax请求
+        # 对ajax传入的数据进行格式的处理
+        # mid = request.body.decode('utf8')
+        # data = json.loads(mid)
+        # # get到用户输入的数据
+        # cur_user_name = data['name']
+        # cur_user_pwd = data['password']
+        # 对用户传入的数据进行验证
+        cur_user_name = request.POST.get('name',None)
+        cur_user_pwd = request.POST.get('password',None)
+        # print(name,pwd)
+        # return HttpResponse('ok')
+        result_info = list(models.User.objects.filter(name=cur_user_name).values())
+        # print(result_info,type(result_info))
+        if result_info:# 如果获取到数据库数据
+            # print(result_info[0]['password'],cur_user_pwd)
+            sql_pwd = result_info[0]['password']
+            result = cur_user_pwd == sql_pwd
+            if result:# 进行验证
+                    switcher = {
+                        1: 'Manager',
+                        2: 'Middle-Manager',
+                        3: 'User',
+                    }
+                    result_type = int(result_info[0]['type'])
+                    # print(result_type,type(result_type))
+                    User_Type = switcher[result_type]
+                    yes = {
+                        'status': 0,
+                        'msg': User_Type,
+                        'data': {
+                            'uid': result_info[0]['uid'],
+                            'username': result_info[0]['name'],
+                            'type': User_Type,
+                        }
+                    }
+                    request.session['username'] = cur_user_name
+                    request.session['password'] = cur_user_pwd
+                    request.session['type'] = User_Type
+                    right = HttpResponse(yes)
+                    right.set_cookie('name',result_info[0]['name'])
+                    right.set_cookie('type',result_info[0]['type'])
+                    return right
+            else:
+                no = {
+                    'status': 1,
+                    'msg': 'Wrong password!!',
+                    'data': {}
+                }
+                error = HttpResponse(no)
+                return error
+        else:
+            no = {
+                'status': 1,
+                'msg': 'Not Found!',
+                'data': {}
+            }
+            error = HttpResponse(no)
+            return error
+    else:
+        return render(request, 'index.html')
+        # return HttpResponse('ok')
 
+def api_check(request):
+    '''
+    0.判断请求方式是不是ajax
+    1.从用户的session中获取信息
+    1.5. 可选，根据用户的session信息获取其他信息并返回
+    2.将用户携带的session信息返回给用户
+    '''
+    judge = request.is_ajax()
+    if judge:
+        # cur_user_info = {
+        #     1: request.session.get('username'),
+        #     2: request.session.get('password'),
+        #     3: request.session.get('type'),
+        # }
+        login_username = request.session.get('username')
+        login_password = request.session.get('password')
+        login_type = request.session.get('type')
+        if login_username:
+            right = {
+                'status': 0,
+                'msg': '',
+                'data': {
+                    'type':login_type,
+                    'name':login_username,
+                }
+            }
+            yes = HttpResponse(right)
+            return yes
+        else:
+            return render(request, 'index.html')
+    else:
+        info = {
+            'status': 1,
+            'msg': 'Request method error!',
+            'data': {}
+        }
+        no = HttpResponse(info)
+        return no
 
+def api_getall(request):
+    judge = request.is_ajax()
+    if judge:
+        pass
+    else:
+        info = {
+            'status': 1,
+            'msg': 'Request method error!',
+            'data': {}
+        }
+        no = HttpResponse(info)
+        return no
 
+def home(request):
+    return render(request,'home.html')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def logout(request):
+    request.session.clear()
+    return render(request,'index.html')
+# def index(request):
+#     # 登陆个人后台管理页面，登陆页面逻辑测试
+#     username = request.COOKIES.get('name')
+#     # 用户访问自己的管理页面
+#     if username:
+#         # 如果用户的name是这是的值那么允许访问
+#         return render(request,'index.html')
+#     else:
+#         # 如果用户的name值不存在，俺么重新返回登陆页面
+#         return redirect('/api/login')
