@@ -5,21 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>银行管理系统</title>
     <link rel="stylesheet" href="../static/css/layui.css">
-    <script src="../static/jquery-3.2.1.js"></script>
-    <script type="text/javascript">
-        window.onload = function (data) {
-            $.ajax({
-                url:"/api/check",
-                type:"POST",
-                data:{
-                    name : data.field.username
-                },
-                success:function(data){layer.alert("success"),function () {
-                    document.getElementById("username").textContent = name;
-                }}
-            });
-        }
-    </script>
+    <!--<script src="../static/jquery-3.2.1.js"></script>-->
+
     <style>
         .left_nav{
             position: relative;
@@ -36,7 +23,7 @@
             <li class="layui-nav-item" id="username">
                 <a href="javascript:;">
                     <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                    朱思佳
+                    <span id="right_username">朱思佳</span>
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
@@ -45,7 +32,7 @@
                     <dd><a href="">安全设置</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="">退出登录</a></li>
+            <li class="layui-nav-item"><a href="../login/index.html">退出登录</a></li>
         </ul>
     </div>
 
@@ -59,7 +46,7 @@
                 <li class="layui-nav-item layui-nav-itemed" id="search">
                     <a href="../search/item2.html" target="menuFrame" class="left_navbar"><i class="layui-icon" style="font-size: 20px; color: #dddddd;position: relative;left: 20px;top: 1px;">&#xe615;</i><span class="left_nav">查询模块</span></a>
                 </li>
-                <li class="layui-nav-item layui-nav-itemed">
+                <li class="layui-nav-item layui-nav-itemed" id="edit_user">
                     <a href="../edit/item3.html" target="menuFrame" class="left_navbar"><i class="layui-icon" style="font-size: 20px; color: #dddddd;position: relative;left: 20px;top: 1px;">&#xe620;</i><span class="left_nav">设置模块</span></a>
                 </li>
                 <li class="layui-nav-item layui-nav-itemed">
@@ -79,13 +66,16 @@
     </div>
 
 </div>
-<script src="../static/layui.all.js"></script>
-<script>
-    layui.use('form', function(){
-        var form = layui.form;
 
-        //各种基于事件的操作，下面会有进一步介绍
-    });
+<script src="../static/layui.all.js"></script>
+<script type="text/javascript">
+        var $ = layui.jquery;
+        layer.msg('Hello Worlsd');
+            $.ajax({
+                url:"/api/check",
+                type:"POST"
+            })
+
 </script>
 </body>
 </html>

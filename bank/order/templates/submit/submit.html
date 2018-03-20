@@ -88,7 +88,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">操作人</label>
         <div class="layui-input-block">
-            <input class="layui-input" id="user" disabled>
+            <input class="layui-input" id="user" name="a_name" disabled>
         </div>
     </div>
 
@@ -102,7 +102,6 @@
 </form>
 <!--引入layui文件-->
 <script src="../static/layui.all.js"></script>
-<script src="https://cdn.bootcss.com/jquery/3.3.1/core.js"></script>
 <script>
     var mydate = document.getElementById("date");
     var date = new Date();
@@ -110,56 +109,68 @@
     var day = date.getDate();
     var nowdate = date.getFullYear() + "-" + (mon<10?"0"+mon:mon) + "-" +(day<10?"0"+day:day);
     mydate.setAttribute("value",nowdate);
-
     var user = document.getElementById("user");
-    var customer = document.getElementById("username").textContent;
-    user.setAttribute("value",customer)
+    //var customer = document.getElementById("username").textContent;
+    //user.setAttribute("value",customer)
 </script>
 <script>
+        console.log(layui);
         var form = layui.form;
-        var layer = layui.layer;
         var $ = layui.jquery;
+
         //自定义验证规则
-        form.verify({
+        layui.form.verify({
             desc: function(value){
                 if(value.length < 1){
                     return '您还没有填写描述内容';
                 }
             }
         });
-
         //监听提交
-        form.on('submit(formSub)',function(data){
+
+        form.on('submit(formSub)',function(data) {
+            //获取所有表单数据
+            localStorage.setItem("a_name", data.field.a_name);
 
             layer.alert(JSON.stringify(data.field), {
                 title: '最终的提交信息'
             });
 
             $.ajax({
-                url:"/api/form"
-                type:"POST",
-                dataType:"json",
-                data: $('#form_add').serialize(),
-
-                success:function(data){
-                    if(data.status=="0")
-                    {
-                        layer.alert("提交成功");
-                    }
-                    else if(data.status=="1")
-                    {
-                        layer.alert("服务器繁忙，请稍等");
-                    }
-                },
-                error:function(){
-                    layer.alert("提交失败");
+                url: "/api/form",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    danger: data.danger,
+                    thing: data.thing,
+                    desc: data.desc,
+                    money: data.money,
+                    level: data.level,
+                    type: data.type
                 }
+            })
+        })
 
-            });
 
-            return false;
-        });
-console.log()
+//        success:function(data){
+//            if(data.status=="0")
+//            {
+//                layer.alert("提交成功");
+//            }
+//            else if(data.status=="1")
+//            {
+//                layer.alert("服务器繁忙，请稍等");
+//            }
+//        },
+//        error:function(){
+//            layer.alert("提交失败");
+//        }
+//        });
+//        return false;
+//        });
+//        localStorage.getItem('right_username')
+//        console.log(localStorage.getItem('right_username'))
+
 </script>
 
 </body>
