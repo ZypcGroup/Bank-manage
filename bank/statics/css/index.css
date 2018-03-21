@@ -1,0 +1,30 @@
+body{
+  background-image:url("/statics/img/background.png");
+  background-size:1550px 800px;
+}
+.topic{
+    width:300px;
+    height:250px;
+    background-color: white;
+    position: absolute;
+    right:350px;
+    top:150px;
+    border-radius: 5px;
+}
+.topic_div1{
+    width:220px;
+    margin:auto;
+    padding:10px;
+}
+.topic_div1_bt h4{
+    width:220px;
+    height:50px;
+    line-height: 50px;
+    text-align: center;
+    color:#01aaed;
+}
+.plholder::-webkit-input-placeholder{
+    color:black;
+    opacity: 0.3;
+    font-size: 13px;
+}

@@ -43,40 +43,46 @@ def csForm(request):
     return response
 
 
-#获得用户信息接口，根据不同用户的类型。返回不同数据。
 def getUser(requset):
     try:
-        if requset.method == "POST":         #判断是否是POST请求
-            type= requset.COOKIES.get("type")#获取COOKIES
-            if type == "3":#如果用户类型是“3”
-                #all_list= list(models.User.objects.filter(type="3"))+list(models.User.objects.filter(type="2"))+list(models.User.objects.filter(type="1"))
-                all_list=models.User.objects.all()
-                #数据库取出的是对象,因为“3”是最高权限的管理员，所以取出所有的用户
-                data=serializers.serialize("json",all_list)#将取出的数据转换成json的字典格式
+
+        if requset.method == "POST":                        #判断是否是POST请求
+            type= requset.COOKIES.get("type")               #获取COOKIES.判断用户的类型
+            if type == "3":                                 #如果用户类型是“3”
+                all_list=models.User.objects.all()         #all_list= list(models.User.objects.filter(type="3"))+list(models.User.objects.filter(type="2"))+list(models.User.objects.filter(type="1"))
+                data=[]
+                for i in all_list:
+                    d={}
+                    d["id"]=i.uid
+                    d["name"]=i.name
+                    d["password"]=i.password
+                    d["type"]=i.type
+                    data.append(d)
                 status=0
                 msg=""
-            elif type == "2":#如果用户类型是“2”
-                all_list=models.User.objects.filter(type="1")
-                #list(models.User.objects.filter(name=name))
-                #取出用户类型为“1”的用户
-                data=serializers.serialize("json",all_list)
+            elif type == "2":                                   #如果用户类型是“2”
+                all_list=models.User.objects.filter(type="1")   #取出用户类型为“1”的用户
+                data=[]                                         #list(models.User.objects.filter(name=name))
+                for i in all_list:
+                    d={}
+                    d["id"]=i.uid
+                    d["name"]=i.name
+                    d["password"]=i.password
+                    d["type"]=i.type
+                    data.append(d)
                 status=0
                 msg=""
             else :
                 status=1
                 msg="请求错误，无法获取用户信息"
                 data="[]"
-            re =json.dumps({
-            "status": status,
-            "msg": msg,
-            "data":json.loads(data),
-        })
+            re=req(status,msg,data)                             #调用函数req()将返回数据进行json封装
             return HttpResponse(re,content_type="application/json")
         else:
             status = 1
             msg = "数据提交错误，无法获取有效的数据，请以正确的方法访问接口"
             data = ""
-            re = req(status, msg, data)#生成返回的json格式数据
+            re = req(status, msg, data)                         #生成返回的json格式数据
         return HttpResponse(re, content_type="application/json")
     except:
         status =1
@@ -97,6 +103,7 @@ def req(status,msg,data):
     })
     return re
 
+#请求参数   cookie中的type
 #添加用户，只有管理员登录才可以访问。
 def setUser(request):
 
@@ -134,7 +141,7 @@ def setUser(request):
 
             else:
                 status = 1
-                msg = "数据提交错误，不能设置管理员"
+                msg = "数据提交错误，权限问题，不能设置管理员"
                 data = ""
                 re = req(status, msg, data)
             return HttpResponse(re, content_type="application/json")
@@ -200,7 +207,6 @@ def form(request):
             msg = ""
             data = ""
             type = request.POST.get("type",None)#首先获取操作类型
-            print(type)
             time = datetime.now()#后端控制字段
             print(time)
             name = request.COOKIES.get("name", None)  # 使用cookies获取操作人姓名
