@@ -8,18 +8,18 @@
         form{
             position: absolute;
             top:50px;
-            left: 300px;
+            
         }
         #top{
-            width: 400px;
+            width: 330px;
             height: auto;
-            margin: 10px auto;
+            margin:10px;
 
         }
     </style>
 </head>
 <body>
-    <div id="top">
+<div id="top">
 <form class="layui-form" style="margin:0px; position:static">
     <div class="layui-form-item">
         <label class="layui-form-label">风险类别</label>
@@ -71,7 +71,7 @@
             <select name="level" lay-verify="required" class="selector" id="level">
                 <option value="">请选择</option>
                 <option value="一级">一级</option>
-                <option value="二级">二级</option>
+                <option value="二级" id="cnm">二级</option>
                 <option value="三级">三级</option>
                 <option value="四级">四级</option>
                 <option value="五级">五级</option>
@@ -87,13 +87,6 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">操作人</label>
-        <div class="layui-input-block">
-            <input class="layui-input" id="user" disabled>
-        </div>
-    </div>
-
-    <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn " lay-submit lay-filter="formSub">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -104,9 +97,11 @@
 </div>
 <!--引入layui文件-->
 <script src="../static/layui.all.js"></script>
-<script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
 
 <script>
+
+    var data = JSON.parse(localStorage.getItem("data")); console.log(data);
+    var $ = layui.$;
     var form = layui.form;
     var layer = layui.layer; 
     var danger=document.getElementById("danger").options; 
@@ -115,26 +110,12 @@
     var money=document.getElementById("money");
     var text=document.getElementById("text");
 
-
-    window.onload=function(){
-        $.ajax({
-            url:"/api/form",
-            type:"POST",
-            data:{
-                },
-            success:function(data){
-              chu(danger,data.danger);
-              chu(xian,data.thing);
-              chu(level,data.level);
-              money.value=data.money;
-              text.value=data.desc;
-            },
-            error:function(){
-            layer.alert("应该是没有后台的原因");
-            }
-
-        });
-    }
+    //chu(danger,data.danger);
+    //chu(xian,data.sign);
+    chu(level,data.city);
+    money.value=data.logins;
+    text.value=data.sex;
+    
     function chu(ji,zhi){
         for (var i=0; i<ji.length; i++) {  
             if (ji[i].value==zhi) {  
@@ -155,25 +136,44 @@
 
         //监听提交
         form.on('submit(formSub)', function(data){
+            //console.log(data.field);
+
+
+
+
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            window.parent.location.reload(); 
+
+
+
+
+
             $.ajax({
-            url:"/api/form",
+            //url:"/api/form",
             type:"POST",
             data:{
+                type:"2",
                 danger:data.danger,
                 thing:data.thing,
                 level:data.level,
                 money:data.money,
-                desc:data.desc
+                desc:data.desc,
+                lid:data.lid
                 },
             success:function(data){
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            window.parent.location.reload(); 
             },
             error:function(){
-            layer.alert("应该是没有后台的原因");
+            //layer.alert("应该是没有后台的原因");
             }
-
+            
         });
             return false;
         });
+
 </script>
 
 </body>
