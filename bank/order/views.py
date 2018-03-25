@@ -42,7 +42,6 @@ def csForm(request):
     response.set_cookie('type', "3",36000)
     return response
 
-
 def getUser(requset):
     try:
 
@@ -90,9 +89,6 @@ def getUser(requset):
         data=""
         re = req(status, msg, data)
         return HttpResponse(re,content_type="application/json")
-
-
-
 
 #函数req用来向前端返回json数据
 def req(status,msg,data):
@@ -292,7 +288,7 @@ def form(request):
         return HttpResponse(re,content_type="application/json")
 
 
-# 李启蒙接口部分代码
+#####################################################################################################################
 def login(request):
     return render(request, 'index.html')
 
@@ -369,6 +365,10 @@ def api_login(request):
         return render(request, 'index.html')
         # return HttpResponse('ok')
 
+# home路由作为一个中转跳转到个人主页
+def home(request):
+    return render(request,'home.html')
+
 def api_check(request):
     '''
     0.判断请求方式是不是ajax
@@ -408,10 +408,71 @@ def api_check(request):
         no = HttpResponse(info)
         return no
 
+# 个人主页中退出登录路由
+def logout(request):
+    request.session.clear()
+    return render(request,'index.html')
+
 def api_getall(request):
+    '''
+        用户后去订单的接口
+        0.api_check中已经验证过当前登录的用户(不验证当前用户身份)
+        1.从session中获取当前登录用户的重要信息
+        2.对信息进行判断，根据身份然后进行数据库的查询和操作
+        3.将数据库中返回的数据进行整理，以一定的格式进行返回
+    '''
     judge = request.is_ajax()
     if judge:
-        pass
+        login_username = request.session.get('username')
+        login_password = request.session.get('password')
+        login_type = request.session.get('type')
+        if login_type == 1:
+            data = list(models.List.objects.all().values())
+            info = dict()
+            top = len(data)
+            for i in range(0,top):
+                info[i+1] = data[i]
+            return_info = {
+                'status': 0,
+                'msg': 'Return Right!',
+                data: info,
+            }
+            data = HttpResponse(return_info)
+            return data
+        elif login_type == 2:
+            data = list(models.List.objects.all().values())
+            info = dict()
+            top = len(data)
+            for i in range(0, top):
+                info[i + 1] = data[i]
+            return_info = {
+                'status': 0,
+                'msg': 'Return Right!',
+                data: info,
+            }
+            data = HttpResponse(return_info)
+            return data
+        elif login_type == 3:
+            data = list(models.List.objects.filter(name = login_username).values())
+            info = dict()
+            top = len(data)
+            for i in range(0, top):
+                info[i + 1] = data[i]
+            return_info = {
+                'status': 0,
+                'msg': 'Return Right!',
+                data: info,
+            }
+            data = HttpResponse(return_info)
+            return data
+        else:
+            info = {
+                'status': 1,
+                'msg': 'No Match Data!',
+                'data': {}
+            }
+            data = HttpResponse(info)
+            return data
     else:
         info = {
             'status': 1,
@@ -421,12 +482,6 @@ def api_getall(request):
         no = HttpResponse(info)
         return no
 
-def home(request):
-    return render(request,'home.html')
-
-def logout(request):
-    request.session.clear()
-    return render(request,'index.html')
 # def index(request):
 #     # 登陆个人后台管理页面，登陆页面逻辑测试
 #     username = request.COOKIES.get('name')
