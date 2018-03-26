@@ -414,75 +414,150 @@ def logout(request):
     return render(request,'index.html')
 
 def api_getall(request):
-    '''
-        用户后去订单的接口
-        0.api_check中已经验证过当前登录的用户(不验证当前用户身份)
-        1.从session中获取当前登录用户的重要信息
-        2.对信息进行判断，根据身份然后进行数据库的查询和操作
-        3.将数据库中返回的数据进行整理，以一定的格式进行返回
-    '''
-    judge = request.is_ajax()
-    if judge:
-        login_username = request.session.get('username')
-        login_password = request.session.get('password')
-        login_type = request.session.get('type')
-        if login_type == 1:
-            data = list(models.List.objects.all().values())
-            info = dict()
-            top = len(data)
-            for i in range(0,top):
-                info[i+1] = data[i]
-            return_info = {
-                'status': 0,
-                'msg': 'Return Right!',
-                data: info,
-            }
-            data = HttpResponse(return_info)
-            return data
-        elif login_type == 2:
-            data = list(models.List.objects.all().values())
-            info = dict()
-            top = len(data)
-            for i in range(0, top):
-                info[i + 1] = data[i]
-            return_info = {
-                'status': 0,
-                'msg': 'Return Right!',
-                data: info,
-            }
-            data = HttpResponse(return_info)
-            return data
-        elif login_type == 3:
-            data = list(models.List.objects.filter(name = login_username).values())
-            info = dict()
-            top = len(data)
-            for i in range(0, top):
-                info[i + 1] = data[i]
-            return_info = {
-                'status': 0,
-                'msg': 'Return Right!',
-                data: info,
-            }
-            data = HttpResponse(return_info)
-            return data
+        '''
+            用户后去订单的接口
+            0.api_check中已经验证过当前登录的用户(不验证当前用户身份)
+            1.从session中获取当前登录用户的重要信息
+            2.对信息进行判断，根据身份然后进行数据库的查询和操作
+            3.将数据库中返回的数据进行整理，以一定的格式进行返回
+        '''
+        judge = request.is_ajax()
+        if judge:
+            login_username = request.session.get('username')
+            login_password = request.session.get('password')
+            login_type = request.session.get('type')
+            if login_type == 1:
+                result = list(models.List.objects.all().values())
+                data = {
+                    'danger': [],
+                    'thing': [],
+                    'desc': [],
+                    'money': [],
+                    'level': [],
+                    'time': [],
+                    'name': [],
+                    'lid': [],
+                }
+                top = len(result)
+                for i in range(0, top):
+                    data['danger'].append(result[i]['danger'])
+                    data['thing'].append(result[i]['shing'])
+                    data['desc'].append(result[i]['desc'])
+                    data['money'].append(result[i]['money'])
+                    data['level'].append(result[i]['level'])
+                    data['time'].append(result[i]['time'])
+                    data['name'].append(result[i]['name'])
+                    data['lid'].append(result[i]['lid'])
+                # info = dict()
+                # top = len(data)
+                # for i in range(0,top):
+                #     info[i+1] = data[i]
+                # return_info = {
+                #     'status': 0,
+                #     'msg': 'Return Right!',
+                #     data: info,
+                # }
+                return_info = {
+                    'status': 0,
+                    'msg': 'Return Success!',
+                    'data': data,
+                }
+                data = HttpResponse(return_info)
+                return data
+            elif login_type == 2:
+                result = list(models.List.objects.all().values())
+                data = {
+                    'danger': [],
+                    'thing': [],
+                    'desc': [],
+                    'money': [],
+                    'level': [],
+                    'time': [],
+                    'name': [],
+                    'lid': [],
+                }
+                top = len(result)
+                for i in range(0, top):
+                    data['danger'].append(result[i]['danger'])
+                    data['thing'].append(result[i]['shing'])
+                    data['desc'].append(result[i]['desc'])
+                    data['money'].append(result[i]['money'])
+                    data['level'].append(result[i]['level'])
+                    data['time'].append(result[i]['time'])
+                    data['name'].append(result[i]['name'])
+                    data['lid'].append(result[i]['lid'])
+                # info = dict()
+                # top = len(data)
+                # for i in range(0,top):
+                #     info[i+1] = data[i]
+                # return_info = {
+                #     'status': 0,
+                #     'msg': 'Return Right!',
+                #     data: info,
+                # }
+                return_info = {
+                    'status': 0,
+                    'msg': 'Return Success!',
+                    'data': data,
+                }
+                data = HttpResponse(return_info)
+                return data
+            elif login_type == 3:
+                result = list(models.List.objects.filter(name=login_username).values())
+                data = {
+                    'danger': [],
+                    'thing': [],
+                    'desc': [],
+                    'money': [],
+                    'level': [],
+                    'time': [],
+                    'name': [],
+                    'lid': [],
+                }
+                top = len(result)
+                for i in range(0, top):
+                    data['danger'].append(result[i]['danger'])
+                    data['thing'].append(result[i]['shing'])
+                    data['desc'].append(result[i]['desc'])
+                    data['money'].append(result[i]['money'])
+                    data['level'].append(result[i]['level'])
+                    data['time'].append(result[i]['time'])
+                    data['name'].append(result[i]['name'])
+                    data['lid'].append(result[i]['lid'])
+                # info = dict()
+                # top = len(data)
+                # for i in range(0,top):
+                #     info[i+1] = data[i]
+                # return_info = {
+                #     'status': 0,
+                #     'msg': 'Return Right!',
+                #     data: info,
+                # }
+                return_info = {
+                    'status': 0,
+                    'msg': 'Return Success!',
+                    'data': data,
+                }
+                data = HttpResponse(return_info)
+                return data
+            else:
+                info = {
+                    'status': 1,
+                    'msg': 'No Match Data!',
+                    'data': {}
+                }
+                data = HttpResponse(info)
+                return data
         else:
             info = {
                 'status': 1,
-                'msg': 'No Match Data!',
+                'msg': 'Request method error!',
                 'data': {}
             }
-            data = HttpResponse(info)
-            return data
-    else:
-        info = {
-            'status': 1,
-            'msg': 'Request method error!',
-            'data': {}
-        }
-        no = HttpResponse(info)
-        return no
+            no = HttpResponse(info)
+            return no
 
-# def index(request):
+            # def index(request):
 #     # 登陆个人后台管理页面，登陆页面逻辑测试
 #     username = request.COOKIES.get('name')
 #     # 用户访问自己的管理页面

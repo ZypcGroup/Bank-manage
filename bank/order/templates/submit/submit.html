@@ -14,12 +14,7 @@
 </head>
 <body>
 <form class="layui-form layui-form-pane" id="form_add">
-    <div class="layui-form-item">
-        <label class="layui-form-label">发生时间</label>
-        <div class="layui-input-block">
-            <input type="text" name="time"  class="layui-input" id="date" disabled>
-        </div>
-    </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label">风险类别</label>
         <div class="layui-input-block">
@@ -114,17 +109,17 @@
 </form>
 <!--引入layui文件-->
 <script src="../static/layui.all.js"></script>
-<script>
-    var mydate = document.getElementById("date");
-    var date = new Date();
-    var mon = date.getMonth() + 1;
-    var day = date.getDate();
-    var nowdate = date.getFullYear() + "-" + (mon<10?"0"+mon:mon) + "-" +(day<10?"0"+day:day);
-    mydate.setAttribute("value",nowdate);
-    var user = document.getElementById("user");
-    //var customer = document.getElementById("username").textContent;
-    //user.setAttribute("value",customer)
-</script>
+<!--<script>-->
+    <!--var mydate = document.getElementById("date");-->
+    <!--var date = new Date();-->
+    <!--var mon = date.getMonth() + 1;-->
+    <!--var day = date.getDate();-->
+    <!--var nowdate = date.getFullYear() + "-" + (mon<10?"0"+mon:mon) + "-" +(day<10?"0"+day:day);-->
+    <!--mydate.setAttribute("value",nowdate);-->
+    <!--var user = document.getElementById("user");-->
+    <!--//var customer = document.getElementById("username").textContent;-->
+    <!--//user.setAttribute("value",customer)-->
+<!--</script>-->
 <script>
         var form = layui.form;
         var $ = layui.jquery;
@@ -141,48 +136,28 @@
         form.on('submit(formSub)',function(data) {
             //获取所有表单数据
             localStorage.setItem("a_name", data.field.a_name);
-
             layer.alert(JSON.stringify(data.field), {
                 title: '最终的提交信息'
             });
+            return false;
 
             $.ajax({
                 url: "/api/form",
                 type: "POST",
                 dataType: "json",
                 data : {
-                    danger: data.danger,
-                    thing: data.thing,
-                    desc: data.desc,
-                    money: data.money,
-                    level: data.level,
-                    type: data.type
+                    danger: data.field.danger,
+                    thing: data.field.thing,                                                                                
+                    desc: data.field.desc,
+                    money: data.field.money,
+                    level: data.field.level,
+                    type: data.field.type
                 },
                 success : function () {layer.msg("提交成功")},
                 error : function(){layer.msg("提交失败")}
             })
         })
-
-
-//        success:function(data){
-//            if(data.status=="0")
-//            {
-//                layer.alert("提交成功");
-//            }
-//            else if(data.status=="1")
-//            {
-//                layer.alert("服务器繁忙，请稍等");
-//            }
-//        },
-//        error:function(){
-//            layer.alert("提交失败");
-//        }
-//        });
-//        return false;
-//        });
-//        localStorage.getItem('right_username')
-//        console.log(localStorage.getItem('right_username'))
-
+    
 </script>
 
 </body>
