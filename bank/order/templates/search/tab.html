@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui.form小例子</title>
+    <link rel="stylesheet" href="../static/css/layui.css" media="all">
+    <style>
+        form{
+            position: absolute;
+            top:50px;
+            
+        }
+        #top{
+            width: 330px;
+            height: auto;
+            margin:10px;
+
+        }
+    </style>
+</head>
+<body>
+<div id="top">
+<form class="layui-form" style="margin:0px; position:static">
+    <div class="layui-form-item">
+        <label class="layui-form-label">风险类别</label>
+        <div class="layui-input-block">
+            <select name="danger" lay-verify="required" id="danger">
+                <option value="">请选择</option>
+                <optgroup label="外部">
+                    <option value="欺诈">欺诈</option>
+                    <option value="客户产品和业务活动">客户产品和业务活动</option>
+                    <option value="执行配送和管理流程">执行配送和管理流程</option>
+                    <option value="内外勾结欺诈">内外勾结欺诈</option>
+                </optgroup>
+                <optgroup label="内部">
+                    <option value="产品缺陷">产品缺陷</option>
+                    <option value="不正当业务及市场活动">不正当业务及市场活动</option>
+                    <option value="执行配送和管理流程">执行配送和管理流程</option>
+                    <option value="欺诈和偷盗">欺诈和偷盗</option>
+                </optgroup>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">业务线</label>
+        <div class="layui-input-block">
+            <select name="thing" lay-verify="required" id="xian" class="layui-form" lay-filter="test1">
+                <option value="">请选择</option>
+                <option value="公司财务">公司财务</option>
+                <option value="支付与结算">支付与结算</option>
+                <option value="高业性银行">高业性银行</option>
+                <option value="代理服务">代理服务</option>
+                <option value="销售与交易">销售与交易</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">金额</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input name="money" placeholder="￥" autocomplete="off" class="layui-input" type="text" lay-verify="required" id="money">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" type="level">风险评级</label>
+        <div class="layui-input-block">
+            <select name="level" lay-verify="required" class="selector" id="level">
+                <option value="">请选择</option>
+                <option value="一级">一级</option>
+                <option value="二级" id="cnm">二级</option>
+                <option value="三级">三级</option>
+                <option value="四级">四级</option>
+                <option value="五级">五级</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea name="desc" lay-verify="desc" placeholder="请输入内容" class="layui-textarea" maxlength="255" minlength="1" id="text"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn " lay-submit lay-filter="formSub">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+
+</form>
+</div>
+<!--引入layui文件-->
+<script src="../static/layui.all.js"></script>
+
+<script>
+
+    var data = JSON.parse(localStorage.getItem("data")); console.log(data);
+    var $ = layui.$;
+    var form = layui.form;
+    var layer = layui.layer; 
+    var danger=document.getElementById("danger").options; 
+    var xian=document.getElementById("xian").options;
+    var level=document.getElementById("level").options;
+    var money=document.getElementById("money");
+    var text=document.getElementById("text");
+
+    //chu(danger,data.danger);
+    //chu(xian,data.sign);
+    chu(level,data.city);
+    money.value=data.logins;
+    text.value=data.sex;
+    
+    function chu(ji,zhi){
+        for (var i=0; i<ji.length; i++) {  
+            if (ji[i].value==zhi) {  
+                ji[i].selected=true;  
+                break;
+            }
+        }
+    } 
+    form.render('select');
+        //自定义验证规则
+        form.verify({
+            desc: function(value){
+                if(value.length < 1){
+                    return '您还没有填写描述内容';
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(formSub)', function(data){
+            //console.log(data.field);
+
+
+
+
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            window.parent.location.reload(); 
+
+
+
+
+
+            $.ajax({
+            //url:"/api/form",
+            type:"POST",
+            data:{
+                type:"2",
+                danger:data.danger,
+                thing:data.thing,
+                level:data.level,
+                money:data.money,
+                desc:data.desc,
+                lid:data.lid
+                },
+            success:function(data){
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            window.parent.location.reload(); 
+            },
+            error:function(){
+            //layer.alert("应该是没有后台的原因");
+            }
+            
+        });
+            return false;
+        });
+
+</script>
+
+</body>
+</html>
