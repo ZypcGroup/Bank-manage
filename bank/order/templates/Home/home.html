@@ -14,15 +14,13 @@
     </style>
 </head>
 <body class="layui-layout-body">
-<div class="layui-layout layui-layout-admin">
+    <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe62e;</i>  </div>
-
+        <div class="layui-logo"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe62e;</i></div>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item" id="username">
                 <a href="javascript:;">
                     <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-
                 </a>
             </li>
             <li class="layui-nav-item"><a href="../login/index.html">退出登录</a></li>
@@ -57,7 +55,6 @@
         <!-- 底部固定区域 -->
         © layui.com - 底部固定区域
     </div>
-
 </div>
 
 <script src="../static/layui.all.js"></script>
@@ -70,10 +67,8 @@
             data : {},
             success : function () {
                 document.getElementById("username").innerHTML = data.data.username;
-                console.log(data.data.username)
             }
         });
-
 </script>
 </body>
 </html>
