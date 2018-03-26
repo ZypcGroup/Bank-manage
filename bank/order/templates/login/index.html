@@ -4,65 +4,39 @@
   <meta charset="utf-8">
   <title>登陆</title>
   <link rel="stylesheet" href="../static/css/layui.css">
-<style>
-body{
-  background-image:url("img/background.png");
-  background-size:1550px 800px;
-}
-.topic{
-    width:300px;
-    height:250px;
-    background-color: white;
-    position: absolute;
-    right:300px;
-    top:150px;
-    border-radius: 5px;
-}
-.topic_div1{
-    width:250px;
-    margin:auto;
-    padding:10px;
-}
-.topic_div1_bt h3{
-    width:250px;
-    height:50px;
-    line-height: 50px;
-    text-align: center;
-    color:#1e9fff;
-}
-</style>
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
    <script src="../static/layui.all.js"></script>
-   <script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
   <div class="topic">
       <div class="topic_div1">
-        <div class="topic_div1_bt"><h3>登&nbsp&nbsp&nbsp&nbsp录</h3></div>
+        <div class="topic_div1_bt"><h4>登&nbsp&nbsp&nbsp&nbsp录</h4></div>
         <form class="layui-form" action="">
-            <div class="layui-form-item" style="margin-bottom: 20px">
-                <label class="layui-form-label" style="width:25px;padding-right: 0px"><i class="layui-icon" style="font-size: 24px">&#xe612;</i></label>  
+            <div class="layui-form-item" style="margin-bottom: 23px">
+                <label class="layui-form-label" style="width:25px;padding-right: 0px"><i class="layui-icon" style="font-size: 23px">&#xe612;</i></label>  
                 <div class="layui-input-block" style="margin-left:40px">
-                    <input type="text" name="username" required  lay-verify="username" placeholder="请输入账号" autocomplete="off" class="layui-input" style="border:0px">
+                    <input type="text" name="username" required  lay-verify="username" placeholder="请输入账号" autocomplete="off" class="layui-input plholder" style="border:0px;">
                 </div>
                 <hr style="margin:0px">
             </div>
 
-            <div class="layui-form-item" style="margin-bottom: 20px">
-                <label class="layui-form-label" style="width:25px;padding-right: 0px"><i class="layui-icon" style="font-size: 24px">&#xe64c;</i></label>  
+            <div class="layui-form-item" style="margin-bottom: 23px">
+                <label class="layui-form-label" style="width:25px;padding-right: 0px"><i class="layui-icon" style="font-size: 23px">&#xe64c;</i></label>  
                 <div class="layui-input-block" style="margin-left:40px">
-                    <input type="password" name="password" required  lay-verify="password" placeholder="请输入密码" autocomplete="off" class="layui-input" style="border:0px">
+                    <input type="password" name="password" required  lay-verify="password" placeholder="请输入密码" autocomplete="off" class="layui-input plholder" style="border:0px;">
                 </div>
                 <hr style="margin:0px">
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block" style="margin-left:0px">
-                    <button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal" lay-submit lay-filter="formDemo" style="width:250px">登 录</button>
+                    <button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal" lay-submit lay-filter="formDemo" style="width:220px">登 录</button>
                 </div>
             </div>
         </form>
       </div>
   </div>
 <script >
+    var $ = layui.$;
     var form=layui.form;
     var layer=layui.layer;
     form.verify({
@@ -76,18 +50,32 @@ body{
     form.on('submit(formDemo)',function(data){
     //layer.alert(data.field.password, {title: '提示框'}),
         $.ajax({
-            url:"",
+            url:"/api/login",
             type:"POST",
+            //dataType:"json",
             data:{
                 name : data.field.username,
                 password : data.field.password
                 },
-            success:function(data){layer.alert("success")},
-            error:function(data){layer.alert("error")}
+            success:function(data){
+                if(data.status=="0")
+                {
+                    layer.alert("登录成功");
+                    //location.href = "../Home/home.html";       //登录成功后跳转
+                }
+                else if(data.status=="1")
+                {
+                    layer.alert(data.msg);
+                }
+            },
+            error:function(){
+            layer.alert("应该是没有后台的原因");
+            }
+
         });
 
     return false;
      });
-</script
+</script>
 </body>
 </html>
