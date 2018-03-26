@@ -15,7 +15,25 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.conf.urls import url, include
+from order import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^api/csSetUser/',views.csSetUser),
+    url(r'^api/csGetUser/', views.csGetUser),
+    url(r'^api/csRemoveUser/', views.csRemoveUser),
+    url(r'^api/csForm/', views.csForm),
+
+    url(r'^api/getUser', views.getUser),
+    url(r'^api/setUser', views.setUser),
+    url(r'^api/removeUser', views.removeUser),
+    url(r'^api/form', views.form),
+#################################################################################
+    url(r'^index/', views.login),
+    url(r'^api/login/', views.api_login),
+    url(r'^api/check/', views.api_check),
+    url(r'^frame/home/', views.home),
+    url(r'^api/logout/', views.logout),
+    url(r'api/getAll', views.api_getall),
 ]

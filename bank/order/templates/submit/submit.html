@@ -136,10 +136,10 @@
         form.on('submit(formSub)',function(data) {
             //获取所有表单数据
             localStorage.setItem("a_name", data.field.a_name);
-
             layer.alert(JSON.stringify(data.field), {
                 title: '最终的提交信息'
             });
+            return false;
 
             $.ajax({
                 url: "/api/form",
@@ -147,7 +147,7 @@
                 dataType: "json",
                 data : {
                     danger: data.field.danger,
-                    thing: data.field.thing,
+                    thing: data.field.thing,                                                                                
                     desc: data.field.desc,
                     money: data.field.money,
                     level: data.field.level,
@@ -157,27 +157,7 @@
                 error : function(){layer.msg("提交失败")}
             })
         })
-
-
-//        success:function(data){
-//            if(data.status=="0")
-//            {
-//                layer.alert("提交成功");
-//            }
-//            else if(data.status=="1")
-//            {
-//                layer.alert("服务器繁忙，请稍等");
-//            }
-//        },
-//        error:function(){
-//            layer.alert("提交失败");
-//        }
-//        });
-//        return false;
-//        });
-//        localStorage.getItem('right_username')
-//        console.log(localStorage.getItem('right_username'))
-
+    
 </script>
 
 </body>
