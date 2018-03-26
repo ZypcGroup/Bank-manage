@@ -1,5 +1,5 @@
 body{
-  background-image:url("img/background.png");
+  background-image:url("/statics/img/background.png");
   background-size:1550px 800px;
 }
 .topic{
