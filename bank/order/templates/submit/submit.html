@@ -139,16 +139,17 @@
                 type: "POST",
                 dataType: "json",
                 data : {
-                    danger: data.danger,
-                    thing: data.thing,
-                    desc: data.desc,
-                    money: data.money,
-                    level: data.level,
-                    type: data.type
+                    danger: data.field.danger,
+                    thing: data.field.thing,
+                    desc: data.field.desc,
+                    money: data.field.money,
+                    level: data.field.level,
+                    type: "1"
                 },
                 success : function () {layer.msg("提交成功")},
                 error : function(){layer.msg("提交失败")}
             })
+            return false;
         })
 
 
