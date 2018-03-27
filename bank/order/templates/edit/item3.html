@@ -90,13 +90,11 @@ layui.use('table', function(){
       layer.msg(checkStatus.isAll ? '全选': '未全选')
     }
   };
-  
   $('.demoTable .layui-btn').on('click', function(){
     var type = $(this).data('type');
     active[type] ? active[type].call(this) : '';
   });
 });
 </script>
-
 </body>
 </html>
