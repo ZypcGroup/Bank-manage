@@ -9,44 +9,32 @@ from django.shortcuts import render
 from order import models
 import json
 from datetime import datetime
-# Create your views here.
 
-#/api/setUser接口测试
-def csSetUser(request):         #设置cookic
-   # response=render(request,"csSetUser.html")
-    #response = HttpResponseRedirect('/api/setUser')
-    response=render(request, "login/index.html")
-    response.set_cookie('name', "sun",36000)
-    response.set_cookie('type', "3",36000)
-    return response
-#/api/getUser接口测试
-def csGetUser(request):         #设置cookic
-   # response=render(request,"csSetUser.html")
-    #response = HttpResponseRedirect('/api/setUser')
-    response=render(request, "csGetUser.html")
-    response.set_cookie('name', "sun1",36000)
-    response.set_cookie('type', "3",36000)
-    return response
-#/api/removeUser接口测试
-def csRemoveUser(request):         #设置cookic
-    response=render(request, "csRemoveUser.html")
-    response.set_cookie('name', "sun",36000)
-    response.set_cookie('pk',"31",36000)
-    response.set_cookie('type', "3",36000)
-    return response
 
-def csForm(request):
-    response=render(request, "csForm.html")
-    response.set_cookie('name', "sun",36000)
-    response.set_cookie('pk',"32",36000)
-    response.set_cookie('type', "3",36000)
-    return response
+
+def home(request):
+    print("123")
+    return render(request,"Home/home.html")
+def submit(request):
+    return render(request,"submit/submit.html")
+def data(request):
+    return render(request,"data/item4.html")
+def edit(request):
+    return render(request,"edit/item3.html")
+def welcome(request):
+    return render(request,"welcome/welcome.html")
+def search(request):
+    return render(request,"search/item2.html")
+def tab(request):
+    return render(request,"search/tab.html")
+
 
 def getUser(requset):
     try:
 
         if requset.method == "POST":                        #判断是否是POST请求
-            type= requset.COOKIES.get("type")               #获取COOKIES.判断用户的类型
+            #type= requset.COOKIES.get("type")               #获取COOKIES.判断用户的类型
+            type="3"
             if type == "3":                                 #如果用户类型是“3”
                 all_list=models.User.objects.all()         #all_list= list(models.User.objects.filter(type="3"))+list(models.User.objects.filter(type="2"))+list(models.User.objects.filter(type="1"))
                 data=[]
@@ -204,8 +192,9 @@ def form(request):
             data = ""
             type = request.POST.get("type",None)#首先获取操作类型
             time = datetime.now()#后端控制字段
-            print(time)
-            name = request.COOKIES.get("name", None)  # 使用cookies获取操作人姓名
+            print(type)
+#            name = request.COOKIES.get("name", None)  # 使用cookies获取操作人姓名
+            name="sunmingming"           #-------------------------伪造数据
             if type=="1":  #编辑类型为增加的时候
                 danger = request.POST.get("danger", None)  # 前端提交数据
                 thing = request.POST.get("thing", None)
@@ -223,7 +212,7 @@ def form(request):
                 )
                 re = req(status, msg, data)
                 all_list = models.List.objects.all()
-                print(serializers.serialize("json",all_list))
+                # print(serializers.serialize("json",all_list))
 
 
             elif type=="2":#编辑类型为修改的时候
@@ -290,7 +279,7 @@ def form(request):
 
 #####################################################################################################################
 def login(request):
-    return render(request, 'index.html')
+    return render(request, 'login/index.html')
 
 def api_login(request):
     '''
@@ -300,6 +289,8 @@ def api_login(request):
         2. 操作数据库数据
         3. 进行数据验证
         4. 逻辑判断，若是则跳转至管理页面，若不是则跳转至登陆页面
+
+
     '''
     judge = request.is_ajax()
     if judge:# 登陆是ajax请求
@@ -362,12 +353,11 @@ def api_login(request):
             error = HttpResponse(no)
             return error
     else:
-        return render(request, 'index.html')
+        return render(request, 'login/index.html')
         # return HttpResponse('ok')
 
 # home路由作为一个中转跳转到个人主页
-def home(request):
-    return render(request,'home.html')
+
 
 def api_check(request):
     '''
