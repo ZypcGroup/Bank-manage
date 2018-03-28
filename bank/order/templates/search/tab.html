@@ -100,7 +100,7 @@
 
 <script>
 
-    var data = JSON.parse(localStorage.getItem("data")); console.log(data);
+    var data = JSON.parse(localStorage.getItem("data"));// console.log(data);
     var $ = layui.$;
     var form = layui.form;
     var layer = layui.layer; 
@@ -110,11 +110,11 @@
     var money=document.getElementById("money");
     var text=document.getElementById("text");
 
-    //chu(danger,data.danger);
-    //chu(xian,data.sign);
-    chu(level,data.city);
-    money.value=data.logins;
-    text.value=data.sex;
+    chu(danger,data.danger);
+    chu(xian,data.thing);
+    chu(level,data.level);
+    money.value=data.money;
+    text.value=data.desc;
     
     function chu(ji,zhi){
         for (var i=0; i<ji.length; i++) {  
@@ -138,19 +138,8 @@
         form.on('submit(formSub)', function(data){
             //console.log(data.field);
 
-
-
-
-            var index = parent.layer.getFrameIndex(window.name);
-            parent.layer.close(index);
-            window.parent.location.reload(); 
-
-
-
-
-
             $.ajax({
-            //url:"/api/form",
+            url:"/api/form",
             type:"POST",
             data:{
                 type:"2",
@@ -167,7 +156,7 @@
             window.parent.location.reload(); 
             },
             error:function(){
-            //layer.alert("应该是没有后台的原因");
+            layer.alert("应该是没有后台的原因");
             }
             
         });
