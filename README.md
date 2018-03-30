@@ -14,4 +14,4 @@
 
 + [项目代码仓库地址](https://github.com/ZypcGroup/Bank-manage/tree/bu)
 
-+ 设计文档： 本WIKI
++ [设计文档](http://wiki.xupt.org/docs/a8848/52)
