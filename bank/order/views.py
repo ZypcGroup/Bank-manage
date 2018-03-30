@@ -8,6 +8,8 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render
 from order import models
 import json
+import time
+from django.http import JsonResponse
 from datetime import datetime
 
 
@@ -29,6 +31,19 @@ def tab(request):
     return render(request,"search/tab.html")
 
 
+def cs(request):
+    return_info = json.dumps({
+        'status': 0,
+        'msg': 'Return Success!',
+        'data': 'lalala',
+    })
+    lala="lsadfsa"
+    data = HttpResponse(return_info,content=dict)
+    return data
+
+
+
+
 def getUser(requset):
     try:
 
@@ -45,6 +60,7 @@ def getUser(requset):
                     d["password"]=i.password
                     d["type"]=i.type
                     data.append(d)
+                    print(d)
                 status=0
                 msg=""
             elif type == "2":                                   #如果用户类型是“2”
@@ -155,11 +171,10 @@ def removeUser(request):
             type = request.COOKIES.get("type")#从cookie接收当前管理员类型
             if (uid != pk) and type=="3":#如果接收的id与当前管理员不相等，才可以删除，避免自己吧自己删除
                 area = models.User.objects.get(pk=uid)
-    #            print(area)
                 area.delete()
                 re=req(status,msg,data)
             elif(uid != pk) and type=="2" and models.User.objects.get(pk=uid,type="1"):
-              #  if not models.User.objects.get(pk=uid,type="2")#如果前端传给的id，不是管理员的话
+            #  if not models.User.objects.get(pk=uid,type="2")#如果前端传给的id，不是管理员的话
                 area = models.User.objects.get(pk=uid)
                 area.delete()
                 re = req(status, msg, data)
@@ -191,7 +206,8 @@ def form(request):
             msg = ""
             data = ""
             type = request.POST.get("type",None)#首先获取操作类型
-            time = datetime.now()#后端控制字段
+
+            times = time.strftime('%Y-%m-%d', time.localtime(time.time()))
             print(type)
 #            name = request.COOKIES.get("name", None)  # 使用cookies获取操作人姓名
             name="sunmingming"           #-------------------------伪造数据
@@ -207,7 +223,7 @@ def form(request):
                     desc=desc,
                     money=money,
                     level=level,
-                    time=time,
+                    time=times,
                     name=name,
                 )
                 re = req(status, msg, data)
@@ -278,8 +294,6 @@ def form(request):
 
 
 #####################################################################################################################
-def login(request):
-    return render(request, 'login/index.html')
 
 def api_login(request):
     '''
@@ -332,26 +346,32 @@ def api_login(request):
                     request.session['username'] = cur_user_name
                     request.session['password'] = cur_user_pwd
                     request.session['type'] = User_Type
-                    right = HttpResponse(yes)
-                    right.set_cookie('name',result_info[0]['name'])
-                    right.set_cookie('type',result_info[0]['type'])
-                    return right
+                    # right = HttpResponse(yes)
+                    # right.set_cookie('name',result_info[0]['name'])
+                    # right.set_cookie('type',result_info[0]['type'])
+                    # result_all = str(yes)
+                    # result = json.dumps(yes)
+                    # yes = json.dumps(yes)
+                    return JsonResponse(yes)
             else:
                 no = {
                     'status': 1,
                     'msg': 'Wrong password!!',
                     'data': {}
                 }
-                error = HttpResponse(no)
-                return error
+                # result = json.dumps(no)
+                # error = HttpResponse(result)
+                return JsonResponse(no)
         else:
             no = {
                 'status': 1,
                 'msg': 'Not Found!',
                 'data': {}
             }
-            error = HttpResponse(no)
-            return error
+            # result_all = json.dumps(no)
+            # error = HttpResponse(result_all)
+            # print(type(result_all),result_all)
+            return JsonResponse(no)
     else:
         return render(request, 'login/index.html')
         # return HttpResponse('ok')
@@ -367,6 +387,8 @@ def api_check(request):
     2.将用户携带的session信息返回给用户
     '''
     judge = request.is_ajax()
+    # judge = True
+    print("Hello")
     if judge:
         # cur_user_info = {
         #     1: request.session.get('username'),
@@ -374,7 +396,7 @@ def api_check(request):
         #     3: request.session.get('type'),
         # }
         login_username = request.session.get('username')
-        login_password = request.session.get('password')
+        # login_password = request.session.get('password')
         login_type = request.session.get('type')
         if login_username:
             right = {
@@ -385,23 +407,23 @@ def api_check(request):
                     'name':login_username,
                 }
             }
-            yes = HttpResponse(right)
+            yes = JsonResponse(right)
             return yes
         else:
-            return render(request, 'index.html')
+            return render(request, 'login/index.html')
     else:
         info = {
             'status': 1,
             'msg': 'Request method error!',
             'data': {}
         }
-        no = HttpResponse(info)
+        no = JsonResponse(info)
         return no
 
 # 个人主页中退出登录路由
 def logout(request):
     request.session.clear()
-    return render(request,'index.html')
+    return render(request,'/login/index.html')
 
 def api_getall(request):
         '''
