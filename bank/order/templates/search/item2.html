@@ -69,7 +69,23 @@
                     success:function(layero,index){
                         var d=JSON.stringify(data);
                         storage.setItem("data",d);
-                    }
+                    },
+                   end:function()
+                        {
+                            var iframedata = JSON.parse(localStorage.getItem("iframedata")); 
+                            if(iframedata!=null){
+                                obj.update({
+                                    danger:iframedata.danger
+                                    ,thing:iframedata.thing
+                                    ,money:iframedata.money
+                                    ,level:iframedata.level
+                                    ,desc:iframedata.desc
+                                })
+                            }
+                            else{
+                                layer.alert("没有接收到数据");
+                            }                
+                        }
                 });
             }
             else if(layevent==='del')
@@ -84,16 +100,18 @@
                             lid:data.id
                             },
                         success:function(data){
-                            if(data.status=="1")
+                            if(data.status==1)
                             {
                                 layer.alert(data.msg);
                             }
-                            else if(data.status=="0"){
+                            else if(data.status==0){
                                 obj.del();
                                 layer.close(index);
+                                $(".layui-laypage-btn")[0].click();
                             }
                         }
-                        });
+                        
+                    });
                     
                 })
 
