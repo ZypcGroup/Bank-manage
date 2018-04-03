@@ -14,8 +14,6 @@ from datetime import datetime
 
 
 
-def home(request):
-    return render(request,"Home/home.html")
 def submit(request):
     return render(request,"submit/submit.html")
 def data(request):
@@ -353,6 +351,12 @@ def api_login(request):
     else:
         return render(request, 'login/index.html')
 
+def home(request):
+    username = request.session.get("username")
+    if username:
+        return render(request,"Home/home.html")
+    else:
+        return render(request,'login/index.html')
 
 def api_check(request):
     '''
@@ -406,79 +410,22 @@ def api_getall(request):
             3.将数据库中返回的数据进行整理，以一定的格式进行返回
         '''
         judge = request.is_ajax()
-        if True:
+        if judge:
             login_username = request.session.get('username')
             login_password = request.session.get('password')
             login_type = request.session.get('type')
             if login_type == 1:
-                result = list(models.List.objects.all().values())
-                data = {
-                    'danger': [],
-                    'thing': [],
-                    'desc': [],
-                    'money': [],
-                    'level': [],
-                    'time': [],
-                    'name': [],
-                    'lid': [],
-                }
-                top = len(result)
-                for i in range(0, top):
-                    data['danger'].append(result[i]['danger'])
-                    data['thing'].append(result[i]['shing'])
-                    data['desc'].append(result[i]['desc'])
-                    data['money'].append(result[i]['money'])
-                    data['level'].append(result[i]['level'])
-                    data['time'].append(result[i]['time'])
-                    data['name'].append(result[i]['name'])
-                    data['lid'].append(result[i]['lid'])
-                # info = dict()
-                # top = len(data)
-                # for i in range(0,top):
-                #     info[i+1] = data[i]
-                # return_info = {
-                #     'status': 0,
-                #     'msg': 'Return Right!',
-                #     data: info,
-                # }
+                data = list(models.List.objects.all().values())
                 return_info = {
                     'status': 0,
+                    'code': 0,
                     'msg': 'Return Success!',
                     'data': data,
                 }
                 data = JsonResponse(return_info)
                 return data
             elif login_type == 2:
-                result = list(models.List.objects.all().values())
-                data = {
-                    'danger': [],
-                    'thing': [],
-                    'desc': [],
-                    'money': [],
-                    'level': [],
-                    'time': [],
-                    'name': [],
-                    'lid': [],
-                }
-                top = len(result)
-                for i in range(0, top):
-                    data['danger'].append(result[i]['danger'])
-                    data['thing'].append(result[i]['shing'])
-                    data['desc'].append(result[i]['desc'])
-                    data['money'].append(result[i]['money'])
-                    data['level'].append(result[i]['level'])
-                    data['time'].append(result[i]['time'])
-                    data['name'].append(result[i]['name'])
-                    data['lid'].append(result[i]['lid'])
-                # info = dict()
-                # top = len(data)
-                # for i in range(0,top):
-                #     info[i+1] = data[i]
-                # return_info = {
-                #     'status': 0,
-                #     'msg': 'Return Right!',
-                #     data: info,
-                # }
+                data = list(models.List.objects.all().values())
                 return_info = {
                     'status': 0,
                     'msg': 'Return Success!',
@@ -487,36 +434,7 @@ def api_getall(request):
                 data = JsonResponse(return_info)
                 return data
             elif login_type == 3:
-                result = list(models.List.objects.filter(name=login_username).values())
-                data = {
-                    'danger': [],
-                    'thing': [],
-                    'desc': [],
-                    'money': [],
-                    'level': [],
-                    'time': [],
-                    'name': [],
-                    'lid': [],
-                }
-                top = len(result)
-                for i in range(0, top):
-                    data['danger'].append(result[i]['danger'])
-                    data['thing'].append(result[i]['shing'])
-                    data['desc'].append(result[i]['desc'])
-                    data['money'].append(result[i]['money'])
-                    data['level'].append(result[i]['level'])
-                    data['time'].append(result[i]['time'])
-                    data['name'].append(result[i]['name'])
-                    data['lid'].append(result[i]['lid'])
-                # info = dict()
-                # top = len(data)
-                # for i in range(0,top):
-                #     info[i+1] = data[i]
-                # return_info = {
-                #     'status': 0,
-                #     'msg': 'Return Right!',
-                #     data: info,
-                # }
+                data = list(models.List.objects.filter(name=login_username).values())
                 return_info = {
                     'status': 0,
                     'msg': 'Return Success!',
@@ -528,7 +446,7 @@ def api_getall(request):
                 info = {
                     'status': 1,
                     'msg': 'No Match Data!',
-                    'data': {}
+                    'data': [],
                 }
                 data = JsonResponse(info)
                 return data
