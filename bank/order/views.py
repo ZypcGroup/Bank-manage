@@ -15,7 +15,6 @@ from datetime import datetime
 
 
 def home(request):
-    print("123")
     return render(request,"Home/home.html")
 def submit(request):
     return render(request,"submit/submit.html")
@@ -303,29 +302,16 @@ def api_login(request):
         2. 操作数据库数据
         3. 进行数据验证
         4. 逻辑判断，若是则跳转至管理页面，若不是则跳转至登陆页面
-
-
-    '''
+   '''
     judge = request.is_ajax()
-    if judge:# 登陆是ajax请求
-        # 对ajax传入的数据进行格式的处理
-        # mid = request.body.decode('utf8')
-        # data = json.loads(mid)
-        # # get到用户输入的数据
-        # cur_user_name = data['name']
-        # cur_user_pwd = data['password']
-        # 对用户传入的数据进行验证
+    if judge:
         cur_user_name = request.POST.get('name',None)
         cur_user_pwd = request.POST.get('password',None)
-        # print(name,pwd)
-        # return HttpResponse('ok')
         result_info = list(models.User.objects.filter(name=cur_user_name).values())
-        # print(result_info,type(result_info))
-        if result_info:# 如果获取到数据库数据
-            # print(result_info[0]['password'],cur_user_pwd)
+        if result_info:
             sql_pwd = result_info[0]['password']
             result = cur_user_pwd == sql_pwd
-            if result:# 进行验证
+            if result:
                     switcher = {
                         1: 'Manager',
                         2: 'Middle-Manager',
@@ -346,21 +332,16 @@ def api_login(request):
                     request.session['username'] = cur_user_name
                     request.session['password'] = cur_user_pwd
                     request.session['type'] = User_Type
-                    # right = HttpResponse(yes)
-                    # right.set_cookie('name',result_info[0]['name'])
-                    # right.set_cookie('type',result_info[0]['type'])
-                    # result_all = str(yes)
-                    # result = json.dumps(yes)
-                    # yes = json.dumps(yes)
-                    return JsonResponse(yes)
+                    right = JsonResponse(yes)
+                    right.set_cookie('name',result_info[0]['name'])
+                    right.set_cookie('type',result_info[0]['type'])
+                    return right
             else:
                 no = {
                     'status': 1,
                     'msg': 'Wrong password!!',
                     'data': {}
                 }
-                # result = json.dumps(no)
-                # error = HttpResponse(result)
                 return JsonResponse(no)
         else:
             no = {
@@ -368,15 +349,9 @@ def api_login(request):
                 'msg': 'Not Found!',
                 'data': {}
             }
-            # result_all = json.dumps(no)
-            # error = HttpResponse(result_all)
-            # print(type(result_all),result_all)
             return JsonResponse(no)
     else:
         return render(request, 'login/index.html')
-        # return HttpResponse('ok')
-
-# home路由作为一个中转跳转到个人主页
 
 
 def api_check(request):
@@ -387,8 +362,6 @@ def api_check(request):
     2.将用户携带的session信息返回给用户
     '''
     judge = request.is_ajax()
-    # judge = True
-    print("Hello")
     if judge:
         # cur_user_info = {
         #     1: request.session.get('username'),
@@ -404,7 +377,7 @@ def api_check(request):
                 'msg': '',
                 'data': {
                     'type':login_type,
-                    'name':login_username,
+                    'username':login_username,
                 }
             }
             yes = JsonResponse(right)
@@ -420,10 +393,9 @@ def api_check(request):
         no = JsonResponse(info)
         return no
 
-# 个人主页中退出登录路由
 def logout(request):
     request.session.clear()
-    return render(request,'/login/index.html')
+    return render(request,'login/index.html')
 
 def api_getall(request):
         '''
@@ -434,7 +406,7 @@ def api_getall(request):
             3.将数据库中返回的数据进行整理，以一定的格式进行返回
         '''
         judge = request.is_ajax()
-        if judge:
+        if True:
             login_username = request.session.get('username')
             login_password = request.session.get('password')
             login_type = request.session.get('type')
@@ -474,7 +446,7 @@ def api_getall(request):
                     'msg': 'Return Success!',
                     'data': data,
                 }
-                data = HttpResponse(return_info)
+                data = JsonResponse(return_info)
                 return data
             elif login_type == 2:
                 result = list(models.List.objects.all().values())
@@ -512,7 +484,7 @@ def api_getall(request):
                     'msg': 'Return Success!',
                     'data': data,
                 }
-                data = HttpResponse(return_info)
+                data = JsonResponse(return_info)
                 return data
             elif login_type == 3:
                 result = list(models.List.objects.filter(name=login_username).values())
@@ -550,7 +522,7 @@ def api_getall(request):
                     'msg': 'Return Success!',
                     'data': data,
                 }
-                data = HttpResponse(return_info)
+                data = JsonResponse(return_info)
                 return data
             else:
                 info = {
@@ -558,7 +530,7 @@ def api_getall(request):
                     'msg': 'No Match Data!',
                     'data': {}
                 }
-                data = HttpResponse(info)
+                data = JsonResponse(info)
                 return data
         else:
             info = {
@@ -566,7 +538,7 @@ def api_getall(request):
                 'msg': 'Request method error!',
                 'data': {}
             }
-            no = HttpResponse(info)
+            no = JsonResponse(info)
             return no
 
             # def index(request):
