@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <title>登陆</title>
-  <link rel="stylesheet" href="../static/css/layui.css">
-  <link rel="stylesheet" href="index.css" type="text/css">
+  <link rel="stylesheet" href="/static/css/layui.css">
+  <link rel="stylesheet" href="/static/css/index.css" type="text/css">
 </head>
 <body>
-   <script src="../static/layui.all.js"></script>
+   <script src="/static/layui.all.js"></script>
   <div class="topic">
       <div class="topic_div1">
         <div class="topic_div1_bt"><h4>登&nbsp&nbsp&nbsp&nbsp录</h4></div>
         <form class="layui-form" action="">
             <div class="layui-form-item" style="margin-bottom: 23px">
-                <label class="layui-form-label" style="width:25px;padding-right: 0px"><i class="layui-icon" style="font-size: 23px">&#xe612;</i></label>  
+                <label class="layui-form-label" style="width:25px;padding-right: 0px"><i class="layui-icon" style="font-size: 23px">&#xe612;</i></label>
                 <div class="layui-input-block" style="margin-left:40px">
                     <input type="text" name="username" required  lay-verify="username" placeholder="请输入账号" autocomplete="off" class="layui-input plholder" style="border:0px;">
                 </div>
@@ -21,7 +21,7 @@
             </div>
 
             <div class="layui-form-item" style="margin-bottom: 23px">
-                <label class="layui-form-label" style="width:25px;padding-right: 0px"><i class="layui-icon" style="font-size: 23px">&#xe64c;</i></label>  
+                <label class="layui-form-label" style="width:25px;padding-right: 0px"><i class="layui-icon" style="font-size: 23px">&#xe64c;</i></label>
                 <div class="layui-input-block" style="margin-left:40px">
                     <input type="password" name="password" required  lay-verify="password" placeholder="请输入密码" autocomplete="off" class="layui-input plholder" style="border:0px;">
                 </div>
@@ -45,7 +45,7 @@
                 return '用户名不能有特殊字符';
             }
         },
-        password: [/^[\S]{6,12}$/ ,'密码必须6到12位，且不能出现空格'] 
+        password: [/^[\S]{6,12}$/ ,'密码必须6到12位，且不能出现空格']
     });
     form.on('submit(formDemo)',function(data){
     //layer.alert(data.field.password, {title: '提示框'}),
@@ -58,14 +58,18 @@
                 password : data.field.password
                 },
             success:function(data){
-                if(data.status=="0")
+                var return_data = data;
+                // var return_data = JSON.parse(data);
+                // console.log(datas.status,typeof(datas));
+                if(return_data.status==0)
                 {
                     layer.alert("登录成功");
-                    //location.href = "../Home/home.html";       //登录成功后跳转
+                    location.href = "/home";       //登录成功后跳转
                 }
-                else if(data.status=="1")
-                {
-                    layer.alert(data.msg);
+                else if(return_data.status==1) {
+                    layer.alert(return_data.msg);
+                }else{
+                    layer.alert("未知错误！");
                 }
             },
             error:function(){

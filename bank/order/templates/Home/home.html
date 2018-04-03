@@ -24,7 +24,7 @@
                     
                 </a>
             </li>
-            <li class="layui-nav-item"><a href="../login/index.html">退出登录</a></li>
+            <li class="layui-nav-item"><a href="/api/logout" id="exit">退出登录</a></li>
         </ul>
     </div>
 
@@ -67,7 +67,7 @@
             type: "POST",
             data : {},
             success : function (data) {
-                document.getElementById("username").innerHTML = data.data.name;
+                document.getElementById("username").innerHTML = data.data.username;
             }
         });
         
