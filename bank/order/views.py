@@ -414,7 +414,7 @@ def api_getall(request):
             login_username = request.session.get('username')
             login_password = request.session.get('password')
             login_type = request.session.get('type')
-            if login_type == 1:
+            if login_type == 3:
                 data = list(models.List.objects.all().values())
                 return_info = {
                     'status': 0,
@@ -433,7 +433,7 @@ def api_getall(request):
                 }
                 data = JsonResponse(return_info)
                 return data
-            elif login_type == 3:
+            elif login_type == 1:
                 data = list(models.List.objects.filter(name=login_username).values())
                 return_info = {
                     'status': 0,
