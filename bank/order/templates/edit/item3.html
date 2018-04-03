@@ -11,17 +11,17 @@
 </head>
 <body>
     <div class="layui-btn-group demoTable">
-      <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
+      <!-- <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
       <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
-      <button class="layui-btn" data-type="isAll">验证是否全选</button>
-      <button class="layui-btn" data-type="addData">增加用户</button>
+      <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
+      <button class="layui-btn" data-type="addData" id="add">增加用户</button>
+      <button class="layui-btn" data-type="addData" id="setUser">确认提交</button>
     <div style="margin:10px">
     <table id="demo" lay-filter="test">
     </table>
     </div>
     <script type="text/html" id="barDemo">
-      <a class="layui-btn layui-btn-xs" lay-event="edit" id="button">编辑</a>
-      <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" id="button">删除</a>
+      <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" id="removeUser">删除</a>
     </script>
     <script src="../static/layui.all.js"></script>
     <script type="text/javascript">
@@ -29,37 +29,66 @@
         var table=layui.table;
         var layer = layui.layer;
         var form=layui.form;
+        $("#correct").hide();
+
+        var table_data = [];
+
+        document.getElementById("add").onclick = function(){
+              $("#add").hide();
+              console.log("ass");
+              $("#correct").show();            
+              table_data.push({"id":10000,"name":"","type":""})
+              table.render({
+                elem: '#demo',
+                height: 470,
+                cellMinWidth: 100,
+                data:table_data,
+                page: true, //开启分页
+                cols: [[ //表头 
+                 {type:'numbers'}
+                // ,{type: 'checkbox',bar:'#demo'}
+                ,{field: 'name', title: '用户名', width: 200,edit: 'text'} //name
+                ,{field: 'id', title: 'ID', width:200,sort:true,edit: 'text'}  //lid
+                ,{field: 'type', title: '身份', width:200, sort: true,edit: 'text'}  //money  
+                ,{field: 'password', title: '密码', width:200, sort: true,edit: 'text'}          
+                ,{fixed: 'right',width:110,toolbar:'#barDemo'}
+                ]]
+               });           
+            }
         table.render({
             elem: '#demo',
             height: 470,
             cellMinWidth: 100,
-            //url: '/api/getAll' ,//数据接口
-            data:[{"id":10000,"username":"郭吉航","identity":"管理员","number":"5"},
-            {"id":10000,"username":"朱思佳","identity":"普通用户","number":"5"},
-            {"id":10000,"username":"李启蒙","identity":"普通用户","number":"5"},
-            {"id":10000,"username":"孙明明","identity":"普通用户","number":"5"},
-            {"id":10000,"username":"李嘉豪","identity":"普通用户","number":"5"},
-            {"id":10000,"username":"王萌","identity":"普通用户","number":"5"},
-            ],
-            
+            // url: '/api/getAll' ,//数据接口
+            data:table_data,
+            id: 'demo',
             page: true, //开启分页
             cols: [[ //表头 
              {type:'numbers'}
-            ,{type: 'checkbox',bar:'#demo'}
-            ,{field: 'username', title: '用户名', width: 200} //name
-            ,{field: 'id', title: 'ID', width: 200,sort:true}  //lid
-            ,{field: 'identity', title: '身份', width:200, sort: true}  //money
-            ,{field: 'number', title: '订单数量', width: 200}  //level
+            // ,{type: 'checkbox',bar:'#demo'}
+            ,{field: 'name', title: '用户名', width: 200,edit: 'text'} //name
+            ,{field: 'password', title: '密码', width:200, sort: true,edit: 'text'}
+            ,{field: 'id', title: 'ID', width: 200,sort:true,edit: 'text'}  //lid
+            ,{field: 'type', title: '身份', width:200, sort: true,edit: 'text'}  //money
             ,{fixed: 'right',width:110,toolbar:'#barDemo'}
             ]]
         });
-        var table = layui.table;
-  //监听表格复选框选择
-  table.on('checkbox(test)', function(obj){
-    console.log(obj)
-  });
+
+        //监听单元格编辑
+        table.on('edit(test)', function(obj){
+        var value = obj.value //得到修改后的值
+        ,data = obj.data //得到所在行所有键值
+        ,field = obj.field; //得到字段
+         layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+       });
+    
+       //监听表格复选框选择
+        table.on('checkbox(test)', function(obj){
+        console.log(obj)
+       });
   //监听工具条
-  table.on('tool(test)', function(obj){
+        table.on('tool(test)', function(obj){
+    console.log(obj);
     var data = obj.data;
     if(obj.event === 'detail'){
       layer.msg('ID：'+ data.id + ' 的查看操作');
@@ -67,32 +96,85 @@
       layer.confirm('真的删除行么', function(index){
         obj.del();
         layer.close(index);
+        table.render;
       });
     } else if(obj.event === 'edit'){
       layer.alert('编辑行：<br>'+ JSON.stringify(data))
     }
   });
   
-  var $ = layui.$, active = {
-    getCheckData: function(){ //获取选中数据
-      var checkStatus = table.checkStatus('demo')
-      ,data = checkStatus.data;
-      layer.alert(JSON.stringify(data));
+         var $ = layui.$, active = {
+          getCheckData: function(){ //获取选中数据
+            var checkStatus = table.checkStatus('demo')
+             ,data = checkStatus.data;
+            layer.alert(JSON.stringify(data));
+         }
+         ,getCheckLength: function(){ //获取选中数目
+           var checkStatus = table.checkStatus('demo')
+           ,data = checkStatus.data;
+           layer.msg('选中了：'+ data.length + ' 个');
+         }
+         ,isAll: function(){ //验证是否全选
+         var checkStatus = table.checkStatus('demo');
+          layer.msg(checkStatus.isAll ? '全选': '未全选')
+       }
+      };
+      $, active = {
+       reload: function(){
+         var demoReload = $('#demo');
+      
+      //执行重载
+          table.reload('demoReload', {
+           page: {
+             curr: 1 //重新从第 1 页开始
+               }
+           });
+         }
+      };
+  
+     $('.demoTable .layui-btn').on('click', function(){
+         var type = $(this).data('type');
+      active[type] ? active[type].call(this) : '';
+     });   
+
+    </script>
+<script>
+  
+
+
+  table.on('edit(test)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+  
+            console.log(obj.data); //所在行的所有相关数据  
+     if(obj.data.name && obj.data.password && obj.data.type != null){
+            $.ajax({
+                url: "/api/setUser",
+                type: "POST",                
+                data : {
+                    name: obj.data.name,
+                    password:obj.data.password,
+                    type:obj.data.type
+                },
+                success : function () {layer.msg("修改成功")},
+                error : function(){layer.msg("修改失败")}
+            })
+            console.log(obj.data)
     }
-    ,getCheckLength: function(){ //获取选中数目
-      var checkStatus = table.checkStatus('demo')
-      ,data = checkStatus.data;
-      layer.msg('选中了：'+ data.length + ' 个');
-    }
-    ,isAll: function(){ //验证是否全选
-      var checkStatus = table.checkStatus('demo');
-      layer.msg(checkStatus.isAll ? '全选': '未全选')
-    }
-  };
-  $('.demoTable .layui-btn').on('click', function(){
-    var type = $(this).data('type');
-    active[type] ? active[type].call(this) : '';
-  });
+    else if(obj.data.name || obj.data.password || obj.data.type == null){
+      layer.msg("请填写完整信息")
+      }
+});
+    
+    $("#removeUser").click(function(data){
+      $.ajax({
+                url: "/api/removeUser",
+                type: "POST",                
+                data : {
+                    id: data.field.id,
+                },
+                success : function () {layer.msg("删除成功")},
+                error : function(){layer.msg("删除失败")}
+            })
+    }) 
 </script>
 </body>
 </html>

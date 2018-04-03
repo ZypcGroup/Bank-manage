@@ -82,16 +82,11 @@
 
     <div class="layui-form-item">
         <label class="layui-form-label" type="level">编辑</label>
-        <div class="layui-input-block">
-            <select name="type" lay-verify="required">
-                <option value="">请选择</option>
-                <option value="增加">增加</option>
-                <option value="编辑">编辑</option>
-                <option value="删除">删除</option>
-            </select>
+        <div class="layui-input-block">      
+                <input class="layui-input" value="增加" disabled>           
         </div>
     </div>
-
+    
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn " lay-submit lay-filter="formSub">立即提交</button>
@@ -150,7 +145,7 @@
                 error : function(){layer.msg("提交失败")}
             })
             return false;
-        })
+        });
     
 </script>
 
