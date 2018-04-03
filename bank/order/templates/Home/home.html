@@ -18,9 +18,10 @@
     <div class="layui-header">
         <div class="layui-logo"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe62e;</i></div>
         <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item" id="username">
-                <a href="javascript:;">
+            <li class="layui-nav-item">
+                <a href="javascript:;"  id="username">
                     <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    
                 </a>
             </li>
             <li class="layui-nav-item"><a href="/api/logout" id="exit">退出登录</a></li>
@@ -69,6 +70,7 @@
                 document.getElementById("username").innerHTML = data.data.username;
             }
         });
+        
 </script>
 </body>
 </html>

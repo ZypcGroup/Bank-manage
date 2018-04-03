@@ -86,12 +86,12 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">操作人</label>
-        <div class="layui-input-block">
-            <input class="layui-input" id="user" name="a_name" disabled>
+        <label class="layui-form-label" type="level">编辑</label>
+        <div class="layui-input-block">      
+                <input class="layui-input" value="增加" disabled>           
         </div>
     </div>
-
+    
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn " lay-submit lay-filter="formSub">立即提交</button>
@@ -150,28 +150,7 @@
                 error : function(){layer.msg("提交失败")}
             })
             return false;
-        })
-
-
-//        success:function(data){
-//            if(data.status=="0")
-//            {
-//                layer.alert("提交成功");
-//            }
-//            else if(data.status=="1")
-//            {
-//                layer.alert("服务器繁忙，请稍等");
-//            }
-//        },
-//        error:function(){
-//            layer.alert("提交失败");
-//        }
-//        });
-//        return false;
-//        });
-//        localStorage.getItem('right_username')
-//        console.log(localStorage.getItem('right_username'))
-
+        });
 </script>
 
 </body>
