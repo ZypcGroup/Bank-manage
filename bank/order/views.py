@@ -311,12 +311,11 @@ def api_login(request):
             result = cur_user_pwd == sql_pwd
             if result:
                     switcher = {
-                        1: 'Manager',
+                        3: 'Manager',
                         2: 'Middle-Manager',
-                        3: 'User',
+                        1: 'User',
                     }
                     result_type = int(result_info[0]['type'])
-                    # print(result_type,type(result_type))
                     User_Type = switcher[result_type]
                     yes = {
                         'status': 0,
@@ -429,6 +428,7 @@ def api_getall(request):
                 return_info = {
                     'status': 0,
                     'msg': 'Return Success!',
+                    'code': 0,
                     'data': data,
                 }
                 data = JsonResponse(return_info)
@@ -438,6 +438,7 @@ def api_getall(request):
                 return_info = {
                     'status': 0,
                     'msg': 'Return Success!',
+                    'code': 0,
                     'data': data,
                 }
                 data = JsonResponse(return_info)
@@ -446,6 +447,7 @@ def api_getall(request):
                 info = {
                     'status': 1,
                     'msg': 'No Match Data!',
+                    'code': 0,
                     'data': [],
                 }
                 data = JsonResponse(info)
@@ -454,6 +456,7 @@ def api_getall(request):
             info = {
                 'status': 1,
                 'msg': 'Request method error!',
+                'code': 0,
                 'data': {}
             }
             no = JsonResponse(info)
