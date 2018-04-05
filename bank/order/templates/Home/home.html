@@ -23,7 +23,7 @@
                     
                 </a>
             </li>
-            <li class="layui-nav-item"><a href="../login/index.html">退出登录</a></li>
+            <li class="layui-nav-item"><a href="/api/logout" id="exit">退出登录</a></li>
         </ul>
     </div>
 
@@ -66,10 +66,14 @@
             type: "POST",
             data : {},
             success : function (data) {
+<<<<<<< HEAD
                 document.getElementById("username").innerHTML = data.data.name;
                 if (data.data.type = 1 || 2){
                     $("#edit_user").show();
                 }
+=======
+                document.getElementById("username").innerHTML = data.data.username;
+>>>>>>> upstream/dev
             }
         });       
 </script>

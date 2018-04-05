@@ -39,11 +39,12 @@ urlpatterns = [
 
     url(r'^search', views.search),
 
-    url(r'^login/', views.login),
-    url(r'^index/', views.login),
-    url(r'^api/login/', views.api_login),
-    url(r'^api/check/', views.api_check),
-    url(r'^frame/home/', views.home),
-    url(r'^api/logout/', views.logout),
+    url(r'^login/', views.api_login),
+    url(r'^index/', views.api_login),
+    url(r'^api/login', views.api_login),
+    url(r'^api/check', views.api_check),
+    url(r'^api/logout', views.logout),
     url(r'api/getAll', views.api_getall),
+    url(r'cs', views.cs),
+
 ]

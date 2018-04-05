@@ -8,13 +8,12 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render
 from order import models
 import json
+import time
+from django.http import JsonResponse
 from datetime import datetime
 
 
 
-def home(request):
-    print("123")
-    return render(request,"Home/home.html")
 def submit(request):
     return render(request,"submit/submit.html")
 def data(request):
@@ -27,6 +26,19 @@ def search(request):
     return render(request,"search/item2.html")
 def tab(request):
     return render(request,"search/tab.html")
+
+
+def cs(request):
+    return_info = json.dumps({
+        'status': 0,
+        'msg': 'Return Success!',
+        'data': 'lalala',
+    })
+    lala="lsadfsa"
+    data = HttpResponse(return_info,content=dict)
+    return data
+
+
 
 
 def getUser(requset):
@@ -45,6 +57,7 @@ def getUser(requset):
                     d["password"]=i.password
                     d["type"]=i.type
                     data.append(d)
+                    print(d)
                 status=0
                 msg=""
             elif type == "2":                                   #如果用户类型是“2”
@@ -155,11 +168,10 @@ def removeUser(request):
             type = request.COOKIES.get("type")#从cookie接收当前管理员类型
             if (uid != pk) and type=="3":#如果接收的id与当前管理员不相等，才可以删除，避免自己吧自己删除
                 area = models.User.objects.get(pk=uid)
-    #            print(area)
                 area.delete()
                 re=req(status,msg,data)
             elif(uid != pk) and type=="2" and models.User.objects.get(pk=uid,type="1"):
-              #  if not models.User.objects.get(pk=uid,type="2")#如果前端传给的id，不是管理员的话
+            #  if not models.User.objects.get(pk=uid,type="2")#如果前端传给的id，不是管理员的话
                 area = models.User.objects.get(pk=uid)
                 area.delete()
                 re = req(status, msg, data)
@@ -191,7 +203,8 @@ def form(request):
             msg = ""
             data = ""
             type = request.POST.get("type",None)#首先获取操作类型
-            time = datetime.now()#后端控制字段
+
+            times = time.strftime('%Y-%m-%d', time.localtime(time.time()))
             print(type)
 #            name = request.COOKIES.get("name", None)  # 使用cookies获取操作人姓名
             name="sunmingming"           #-------------------------伪造数据
@@ -207,7 +220,7 @@ def form(request):
                     desc=desc,
                     money=money,
                     level=level,
-                    time=time,
+                    time=times,
                     name=name,
                 )
                 re = req(status, msg, data)
@@ -278,8 +291,6 @@ def form(request):
 
 
 #####################################################################################################################
-def login(request):
-    return render(request, 'login/index.html')
 
 def api_login(request):
     '''
@@ -289,36 +300,22 @@ def api_login(request):
         2. 操作数据库数据
         3. 进行数据验证
         4. 逻辑判断，若是则跳转至管理页面，若不是则跳转至登陆页面
-
-
-    '''
+   '''
     judge = request.is_ajax()
-    if judge:# 登陆是ajax请求
-        # 对ajax传入的数据进行格式的处理
-        # mid = request.body.decode('utf8')
-        # data = json.loads(mid)
-        # # get到用户输入的数据
-        # cur_user_name = data['name']
-        # cur_user_pwd = data['password']
-        # 对用户传入的数据进行验证
+    if judge:
         cur_user_name = request.POST.get('name',None)
         cur_user_pwd = request.POST.get('password',None)
-        # print(name,pwd)
-        # return HttpResponse('ok')
         result_info = list(models.User.objects.filter(name=cur_user_name).values())
-        # print(result_info,type(result_info))
-        if result_info:# 如果获取到数据库数据
-            # print(result_info[0]['password'],cur_user_pwd)
+        if result_info:
             sql_pwd = result_info[0]['password']
             result = cur_user_pwd == sql_pwd
-            if result:# 进行验证
+            if result:
                     switcher = {
-                        1: 'Manager',
+                        3: 'Manager',
                         2: 'Middle-Manager',
-                        3: 'User',
+                        1: 'User',
                     }
                     result_type = int(result_info[0]['type'])
-                    # print(result_type,type(result_type))
                     User_Type = switcher[result_type]
                     yes = {
                         'status': 0,
@@ -332,7 +329,7 @@ def api_login(request):
                     request.session['username'] = cur_user_name
                     request.session['password'] = cur_user_pwd
                     request.session['type'] = User_Type
-                    right = HttpResponse(yes)
+                    right = JsonResponse(yes)
                     right.set_cookie('name',result_info[0]['name'])
                     right.set_cookie('type',result_info[0]['type'])
                     return right
@@ -342,22 +339,23 @@ def api_login(request):
                     'msg': 'Wrong password!!',
                     'data': {}
                 }
-                error = HttpResponse(no)
-                return error
+                return JsonResponse(no)
         else:
             no = {
                 'status': 1,
                 'msg': 'Not Found!',
                 'data': {}
             }
-            error = HttpResponse(no)
-            return error
+            return JsonResponse(no)
     else:
         return render(request, 'login/index.html')
-        # return HttpResponse('ok')
 
-# home路由作为一个中转跳转到个人主页
-
+def home(request):
+    username = request.session.get("username")
+    if username:
+        return render(request,"Home/home.html")
+    else:
+        return render(request,'login/index.html')
 
 def api_check(request):
     '''
@@ -374,7 +372,7 @@ def api_check(request):
         #     3: request.session.get('type'),
         # }
         login_username = request.session.get('username')
-        login_password = request.session.get('password')
+        # login_password = request.session.get('password')
         login_type = request.session.get('type')
         if login_username:
             right = {
@@ -382,26 +380,25 @@ def api_check(request):
                 'msg': '',
                 'data': {
                     'type':login_type,
-                    'name':login_username,
+                    'username':login_username,
                 }
             }
-            yes = HttpResponse(right)
+            yes = JsonResponse(right)
             return yes
         else:
-            return render(request, 'index.html')
+            return render(request, 'login/index.html')
     else:
         info = {
             'status': 1,
             'msg': 'Request method error!',
             'data': {}
         }
-        no = HttpResponse(info)
+        no = JsonResponse(info)
         return no
 
-# 个人主页中退出登录路由
 def logout(request):
     request.session.clear()
-    return render(request,'index.html')
+    return render(request,'login/index.html')
 
 def api_getall(request):
         '''
@@ -416,135 +413,53 @@ def api_getall(request):
             login_username = request.session.get('username')
             login_password = request.session.get('password')
             login_type = request.session.get('type')
-            if login_type == 1:
-                result = list(models.List.objects.all().values())
-                data = {
-                    'danger': [],
-                    'thing': [],
-                    'desc': [],
-                    'money': [],
-                    'level': [],
-                    'time': [],
-                    'name': [],
-                    'lid': [],
-                }
-                top = len(result)
-                for i in range(0, top):
-                    data['danger'].append(result[i]['danger'])
-                    data['thing'].append(result[i]['shing'])
-                    data['desc'].append(result[i]['desc'])
-                    data['money'].append(result[i]['money'])
-                    data['level'].append(result[i]['level'])
-                    data['time'].append(result[i]['time'])
-                    data['name'].append(result[i]['name'])
-                    data['lid'].append(result[i]['lid'])
-                # info = dict()
-                # top = len(data)
-                # for i in range(0,top):
-                #     info[i+1] = data[i]
-                # return_info = {
-                #     'status': 0,
-                #     'msg': 'Return Right!',
-                #     data: info,
-                # }
+            if login_type == 3:
+                data = list(models.List.objects.all().values())
                 return_info = {
                     'status': 0,
+                    'code': 0,
                     'msg': 'Return Success!',
                     'data': data,
                 }
-                data = HttpResponse(return_info)
+                data = JsonResponse(return_info)
                 return data
             elif login_type == 2:
-                result = list(models.List.objects.all().values())
-                data = {
-                    'danger': [],
-                    'thing': [],
-                    'desc': [],
-                    'money': [],
-                    'level': [],
-                    'time': [],
-                    'name': [],
-                    'lid': [],
-                }
-                top = len(result)
-                for i in range(0, top):
-                    data['danger'].append(result[i]['danger'])
-                    data['thing'].append(result[i]['shing'])
-                    data['desc'].append(result[i]['desc'])
-                    data['money'].append(result[i]['money'])
-                    data['level'].append(result[i]['level'])
-                    data['time'].append(result[i]['time'])
-                    data['name'].append(result[i]['name'])
-                    data['lid'].append(result[i]['lid'])
-                # info = dict()
-                # top = len(data)
-                # for i in range(0,top):
-                #     info[i+1] = data[i]
-                # return_info = {
-                #     'status': 0,
-                #     'msg': 'Return Right!',
-                #     data: info,
-                # }
+                data = list(models.List.objects.all().values())
                 return_info = {
                     'status': 0,
                     'msg': 'Return Success!',
+                    'code': 0,
                     'data': data,
                 }
-                data = HttpResponse(return_info)
+                data = JsonResponse(return_info)
                 return data
-            elif login_type == 3:
-                result = list(models.List.objects.filter(name=login_username).values())
-                data = {
-                    'danger': [],
-                    'thing': [],
-                    'desc': [],
-                    'money': [],
-                    'level': [],
-                    'time': [],
-                    'name': [],
-                    'lid': [],
-                }
-                top = len(result)
-                for i in range(0, top):
-                    data['danger'].append(result[i]['danger'])
-                    data['thing'].append(result[i]['shing'])
-                    data['desc'].append(result[i]['desc'])
-                    data['money'].append(result[i]['money'])
-                    data['level'].append(result[i]['level'])
-                    data['time'].append(result[i]['time'])
-                    data['name'].append(result[i]['name'])
-                    data['lid'].append(result[i]['lid'])
-                # info = dict()
-                # top = len(data)
-                # for i in range(0,top):
-                #     info[i+1] = data[i]
-                # return_info = {
-                #     'status': 0,
-                #     'msg': 'Return Right!',
-                #     data: info,
-                # }
+            elif login_type == 1:
+                data = list(models.List.objects.filter(name=login_username).values())
                 return_info = {
                     'status': 0,
                     'msg': 'Return Success!',
+                    'code': 0,
                     'data': data,
                 }
-                data = HttpResponse(return_info)
+                data = JsonResponse(return_info)
                 return data
             else:
                 info = {
                     'status': 1,
                     'msg': 'No Match Data!',
-                    'data': {}
+                    'code': 0,
+                    'data': [],
                 }
-                data = HttpResponse(info)
+                data = JsonResponse(info)
                 return data
         else:
             info = {
                 'status': 1,
                 'msg': 'Request method error!',
+                'code': 0,
                 'data': {}
             }
-            no = HttpResponse(info)
+            no = JsonResponse(info)
             return no
 
             # def index(request):
