@@ -20,7 +20,6 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;"  id="username">
-                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
                     
                 </a>
             </li>
@@ -59,7 +58,7 @@
 
 <script src="../static/layui.all.js"></script>
 <script type="text/javascript">
-
+        $("#edit_user").hide();
         var $ = layui.jquery;
         //引入jQuery
         $.ajax({
@@ -67,10 +66,16 @@
             type: "POST",
             data : {},
             success : function (data) {
+<<<<<<< HEAD
+                document.getElementById("username").innerHTML = data.data.name;
+                if (data.data.type = 1 || 2){
+                    $("#edit_user").show();
+                }
+=======
                 document.getElementById("username").innerHTML = data.data.username;
+>>>>>>> upstream/dev
             }
-        });
-        
+        });       
 </script>
 </body>
 </html>

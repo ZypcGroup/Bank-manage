@@ -59,7 +59,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">金额</label>
             <div class="layui-input-inline" style="width: 100px;">
-                <input name="money" placeholder="￥" autocomplete="off" class="layui-input" type="text" lay-verify="required">
+                <input name="money" placeholder="￥" lay-verify="number" autocomplete="off" class="layui-input" type="text" lay-verify="required">
             </div>
         </div>
     </div>
@@ -117,7 +117,7 @@
         var form = layui.form;
         var $ = layui.jquery;
         //自定义验证规则
-        layui.form.verify({
+        form.verify({
             desc: function(value){
                 if(value.length < 1){
                     return '您还没有填写描述内容';
@@ -128,12 +128,15 @@
 
         form.on('submit(formSub)',function(data) {
             //获取所有表单数据
+<<<<<<< HEAD
+=======
             localStorage.setItem("a_name", data.field.a_name);
 
             layer.alert(JSON.stringify(data.field), {
                 title: '最终的提交信息'
             });
 
+>>>>>>> upstream/dev
             $.ajax({
                 url: "/api/form",
                 type: "POST",
@@ -146,7 +149,10 @@
                     level: data.field.level,
                     type: "1"
                 },
-                success : function () {layer.msg("提交成功")},
+                success : function () {
+                    $("input").val("");$("select").val("");
+                    layer.msg("提交成功");
+                    },
                 error : function(){layer.msg("提交失败")}
             })
             return false;
