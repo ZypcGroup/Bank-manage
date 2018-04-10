@@ -33,6 +33,9 @@ urlpatterns = [
     url(r'^home', views.home),
     url(r'^submit', views.submit),
     url(r'^data', views.data),
+    url(r'^edit/editUser', views.editUser),
+    url(r'^edit/addu', views.editu),
+
     url(r'^edit', views.edit),
     url(r'^welcome', views.welcome),
     url(r'^search/tab', views.tab),
@@ -44,7 +47,7 @@ urlpatterns = [
     url(r'^api/login', views.api_login),
     url(r'^api/check', views.api_check),
     url(r'^api/logout', views.logout),
-    url(r'api/getAll', views.api_getall),
-    url(r'cs', views.cs),
+    url(r'^api/getAll', views.api_getall),
+    url(r'^cs', views.cs),
 
 ]

@@ -18,12 +18,12 @@
     <div class="layui-header">
         <div class="layui-logo"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe62e;</i></div>
         <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item" id="username">
-                <a href="javascript:;">
-                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+            <li class="layui-nav-item">
+                <a href="javascript:;"  id="username">
+                    
                 </a>
             </li>
-            <li class="layui-nav-item"><a href="../login/index.html">退出登录</a></li>
+            <li class="layui-nav-item"><a href="/api/logout" id="exit">退出登录</a></li>
         </ul>
     </div>
 
@@ -58,16 +58,21 @@
 
 <script src="../static/layui.all.js"></script>
 <script type="text/javascript">
-
+{#        $("#edit_user").hide();#}
         var $ = layui.jquery;
         //引入jQuery
         $.ajax({
             url: "/api/check",
             type: "POST",
             data : {},
-            success : function () {
+            success : function (data) {
+{#                document.getElementById("username").innerHTML = data.data.username;#}
+                if (data.data.type == "User" ){
+                    $("#edit_user").hide();
+                }
                 document.getElementById("username").innerHTML = data.data.username;
-            }
+            },
+            error : function(){layer.msg("获取用户信息失败")}                
         });
 </script>
 </body>
