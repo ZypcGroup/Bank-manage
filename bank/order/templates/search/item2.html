@@ -11,8 +11,8 @@
     <table id="demo" lay-filter="test"></table>
     </div>
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        <a class="layui-btn layui-btn-xs" lay-event="edit" style="margin-left:8px;">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" style="margin-left:15px;">删除</a>
     </script>
     <script type="text/javascript">
         var storage=window.localStorage;
@@ -23,7 +23,10 @@
         table.render({
             elem: '#demo',
             height: 470,
-            cellMinWidth: 100,
+            cellMinWidth: 90,
+
+            limit:10,
+            limits:[10,20,30,40,50],
             url: '/api/getAll' ,//数据接口
             /*data:[{"id":10000,"username":"user-0","sex":"女","city":"一级","sign":"签名-0","experience":255,"logins":24,"wealth":82830700,"classify":"作家","score":57},
             {"id":10001,"username":"user-1","sex":"男","city":"一级","sign":"签名-1","experience":884,"logins":58,"wealth":64928690,"classify":"词人","score":27},
@@ -44,22 +47,25 @@
             
             page: true, //开启分页
             cols: [[ //表头
-             {field: 'name', title: '用户名', width: 120} //name
+             {type:'numbers'}
+            ,{field: 'name', title: '用户名', width: 120} //name
             ,{field: 'lid', title: '订单编号', width: 120,sort:true}  //lid
             ,{field: 'money', title: '订单金额', width:120, sort: true}  //money
-            ,{field: 'level', title: '风险评级', width: 150}  //level
+            ,{field: 'level', title: '风险评级', width: 90}  //level
             ,{field: 'danger', title: '风险类别', width: 150}
             ,{field: 'desc', title: '描述'}  //desc
             ,{field: 'thing', title: '业务线', width: 150}  //thing
             ,{field: 'time', title: '时间', width: 150}  //time
-            ,{fixed: 'right',width:110,toolbar:'#barDemo'}
+            ,{fixed: 'right',width:150,toolbar:'#barDemo'}
             ]]
         });
         table.on('tool(test)',function(obj){
             var data=obj.data,
-            layevent=obj.event;
+            layevent=obj.event;console.log(data);
             if(layevent==='edit')
             {
+                var d=JSON.stringify(data);
+                storage.setItem("data",d);
                 layer.open({
                     type:2,
                     area:['400px','520px'],
@@ -91,13 +97,14 @@
             else if(layevent==='del')
             {
                 layer.confirm('确认删除吗',function(index){
-                    
+                    console.log(data);
+
                     $.ajax({
                         url:'/api/form',
                         type:'POST',
                         data:{
                             type:"3",
-                            lid:data.id
+                            id:data.lid
                             },
                         success:function(data){
                             if(data.status==1)

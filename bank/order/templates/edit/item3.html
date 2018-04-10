@@ -15,13 +15,16 @@
       <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
       <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
       <button class="layui-btn" data-type="addData" id="add">增加用户</button>
-    <div style="margin:10px">
-    <table id="demo" lay-filter="test">
-    </table>
     </div>
+    <div style="margin:10px">
+    <table id="demo" lay-filter="test"></table>
+    </div>
+
     <script type="text/html" id="barDemo">
       <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" id="removeUser">删除</a>
+      <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit" id="editUser">编辑</a>
     </script>
+
     <script src="../static/layui.all.js"></script>
     <script type="text/javascript">
         var $ = layui.$;
@@ -177,7 +180,6 @@
       layer.msg("请填写完整信息")
     };
 });
-
 </script>
 </body>
 </html>

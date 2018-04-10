@@ -66,16 +66,13 @@
             type: "POST",
             data : {},
             success : function (data) {
-<<<<<<< HEAD
-                document.getElementById("username").innerHTML = data.data.name;
-                if (data.data.type = 1 || 2){
-                    $("#edit_user").show();
+                if (data.data.type == "User" ){
+                    $("#edit_user").hide();
                 }
-=======
                 document.getElementById("username").innerHTML = data.data.username;
->>>>>>> upstream/dev
-            }
-        });       
+            },
+            error : function(){layer.msg("获取用户信息失败")}                
+        });
 </script>
 </body>
 </html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/css/layui.css"  media="all">
+</head>
+<body>
+        <form class="layui-form layui-form-pane" id="form_add">
+
+                <div class="layui-form-item">
+                        <label class="layui-form-label">用户名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" class="layui-input" id="username" lay-verify="required">
+                        </div>
+                </div>
+
+                <div class="layui-form-item" style="display: none">
+                        <label class="layui-form-label">id</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="id" class="layui-input" id="id" lay-verify="required">
+                        </div>
+                </div>
+            
+                <div class="layui-form-item">
+                    <label class="layui-form-label">身份</label>
+                    <div class="layui-input-block">
+                        <select name="type" lay-verify="required" id="user_type">
+                            <option value="">请选择</option>
+                            <option value="1">普通用户</option>
+                            <option value="2">管理员</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="password" name="password" onkeyup="value=value.replace(/[\W]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))" class="layui-input" lay-verify="password">
+                    </div>
+                </div>
+        
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn " lay-submit lay-filter="formSub">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+
+        </form>
+<!--引入layui文件-->
+<script src="../static/layui.all.js"></script>
+<script>
+        var $ = layui.jquery;
+        var form = layui.form;
+        var layer = layui.layer; 
+        var storage=window.localStorage;
+        var data1 = JSON.parse(localStorage.getItem("data"));
+        var user_type=document.getElementById("user_type").options; 
+        var username=document.getElementById("username");
+        var password=document.getElementById("password");
+        var id=document.getElementById("id");
+
+        // console.log(data);
+        // console.log(username)
+        chu(user_type,data1.user_type);
+
+        username.value=data1.name;
+        console.log(username.value);
+        password.value=data1.password;
+        id.value=data1.id;
+        
+        function chu(ji,zhi){
+        for (var i=0; i<ji.length; i++) {  
+            if (ji[i].value==zhi) {  
+                ji[i].selected = true;  
+                break;
+             }
+            }
+        } 
+        form.render('select');
+
+        //监听提交
+        form.on('submit(formSub)',function(data) {
+            //获取所有表单数据
+            var dd=JSON.stringify(data.field);
+            $.ajax({
+                url: "/api/setUser",
+                type: "POST",
+                data : {         
+                    id:data1.id,
+                    name: data.field.name,
+                    type: data.field.type,
+                    password: data.field.password,
+                },
+                success : function () {
+                    storage.setItem("iframedata",dd);
+                    var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                    layer.msg("编辑成功");
+                    },
+                error : function(){layer.msg("编辑失败")}
+            })
+            return false;
+        });
+     localStorage.clear();
+</script>
+</body>
+</html>   
