@@ -58,7 +58,7 @@
 
 <script src="../static/layui.all.js"></script>
 <script type="text/javascript">
-{#        $("#edit_user").hide();#}
+        $("#edit_user").hide();
         var $ = layui.jquery;
         //引入jQuery
         $.ajax({
@@ -66,7 +66,6 @@
             type: "POST",
             data : {},
             success : function (data) {
-{#                document.getElementById("username").innerHTML = data.data.username;#}
                 if (data.data.type == "User" ){
                     $("#edit_user").hide();
                 }

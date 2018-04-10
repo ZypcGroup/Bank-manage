@@ -73,7 +73,8 @@
                     shadeClose:true,
                     content:'../search/tab.html',
                     success:function(layero,index){
-
+                        var d=JSON.stringify(data);
+                        storage.setItem("data",d);
                     },
                    end:function()
                         {
@@ -88,7 +89,7 @@
                                 })
                             }
                             else{
-                                layer.alert("提交失败");
+                                layer.alert("没有接收到数据");
                             }                
                         }
                 });

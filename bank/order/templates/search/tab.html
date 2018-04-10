@@ -100,8 +100,7 @@
 
 <script>
     var storage=window.localStorage;
-    var datai = JSON.parse(localStorage.getItem("data"));
-    console.log(datai);
+    var data = JSON.parse(localStorage.getItem("data"));// console.log(data);
     var $ = layui.$;
     var form = layui.form;
     var layer = layui.layer; 
@@ -137,7 +136,7 @@
 
         //监听提交
         form.on('submit(formSub)', function(data){
-            console.log(data.field);
+            //console.log(data.field);
             var dd=JSON.stringify(data.field);
             $.ajax({
             url:"/api/form",
@@ -149,7 +148,7 @@
                 level:data.field.level,
                 money:data.field.money,
                 desc:data.field.desc,
-                id:datai.lid
+                lid:data.field.lid
                 },
             success:function(data){
                 storage.setItem("iframedata",dd);
