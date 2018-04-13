@@ -50,7 +50,11 @@ def cs(request):
         d["password"] = i.password
         d["type"] = i.type
         data.append(d)
-        
+
+
+
+
+
 def getUser(requset):
     try:
 
@@ -424,6 +428,7 @@ def api_login(request):
                     right = JsonResponse(yes)
                     right.set_cookie('name',result_info[0]['name'])
                     right.set_cookie('type',result_info[0]['type'])
+
                     return right
             else:
                 no = {
@@ -506,32 +511,50 @@ def api_getall(request):
             login_username = request.session.get('username')
             login_password = request.session.get('password')
             login_type = request.session.get('type')
+
+            limit =int(request.GET.get("limit",None))     #每页数据
+            page = int(request.GET.get("page",None))     #第几页
+
+            switcher = {
+                'Manager':3,
+                'Middle-Manager':2,
+                'User':1,
+            }
+            login_type = switcher[login_type]
             if login_type == 3:
-                data = list(models.List.objects.all().values())
+                count = models.List.objects.count()
+                data=list(models.List.objects.order_by("lid").reverse()[limit*(page-1):page*limit].values())
+                # data = list(models.List.objects.all().values())
                 return_info = {
                     'status': 0,
                     'code': 0,
+                    'count':count,
                     'msg': 'Return Success!',
                     'data': data,
                 }
                 data = JsonResponse(return_info)
                 return data
             elif login_type == 2:
-                data = list(models.List.objects.all().values())
+                # data = list(models.List.objects.all().values())
+                count = models.List.objects.count()
+                data=list(models.List.objects.order_by("lid").reverse()[limit*(page-1):page*limit].values())
                 return_info = {
                     'status': 0,
                     'msg': 'Return Success!',
                     'code': 0,
+                    'count': count,
                     'data': data,
                 }
                 data = JsonResponse(return_info)
                 return data
             elif login_type == 1:
-                data = list(models.List.objects.filter(name=login_username).values())
+                count = models.List.objects.filter(name=login_username).count()
+                data = list(models.List.objects.filter(name=login_username).order_by("lid").reverse()[limit*(page-1):page*limit].values())
                 return_info = {
                     'status': 0,
                     'msg': 'Return Success!',
                     'code': 0,
+                    'count': count,
                     'data': data,
                 }
                 data = JsonResponse(return_info)
