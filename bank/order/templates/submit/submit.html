@@ -7,8 +7,9 @@
     <style>
         form{
             position: absolute;
-            top:50px;
-            left: 300px;
+            top:10px;
+            left: 370px;
+            
         }
     </style>
 </head>
@@ -59,7 +60,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">金额</label>
             <div class="layui-input-inline" style="width: 100px;">
-                <input name="money" placeholder="￥" lay-verify="number" autocomplete="off" class="layui-input" type="text" lay-verify="required">
+                <input name="money" id="money" placeholder="￥" lay-verify="number" autocomplete="off" class="layui-input" type="text" lay-verify="required">
             </div>
         </div>
     </div>
@@ -100,6 +101,7 @@
     </div>
 
 </form>
+
 <!--引入layui文件-->
 <script src="../static/layui.all.js"></script>
 <script>
@@ -145,7 +147,9 @@
                     type: "1"
                 },
                 success : function () {
-                    $("input").val("");$("select").val("");
+                    $("#money").val("");
+                    $("select").val("");
+                    $('#desc').val('');
                     layer.msg("提交成功");
                     },
                 error : function(){layer.msg("提交失败")}

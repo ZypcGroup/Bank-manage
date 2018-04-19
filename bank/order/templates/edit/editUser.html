@@ -6,26 +6,52 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="../static/css/layui.css"  media="all">
+    <style>
+               body{
+        background-color:#fffafa;
+    }
+    form{
+        position: absolute;
+        top:50px;     
+    }
+    #top{
+        width: 380px;
+        height: auto;
+        margin: 15px auto ;
+    }
+    .bt{
+        background-color:#e0ffff; 
+        padding:8px 15px 8px 14px;
+
+        border:1px solid rgb(210,210,210);
+        border-right: 0px;
+    }
+    .move{
+        position: relative;
+        left: 30px;
+    }
+    </style>
 </head>
 <body>
+    <div id="top">
         <form class="layui-form layui-form-pane" id="form_add">
 
-                <div class="layui-form-item">
-                        <label class="layui-form-label">用户名</label>
+                <div class="layui-form-item move">
+                        <label class="layui-form-label bt">用户名</label>
                         <div class="layui-input-block">
                             <input type="text" name="name" class="layui-input" id="username" lay-verify="required">
                         </div>
                 </div>
 
-                <div class="layui-form-item" style="display: none">
-                        <label class="layui-form-label">id</label>
+                <div class="layui-form-item move" style="display: none">
+                        <label class="layui-form-label bt">id</label>
                         <div class="layui-input-block">
                             <input type="text" name="id" class="layui-input" id="id" lay-verify="required">
                         </div>
                 </div>
             
-                <div class="layui-form-item">
-                    <label class="layui-form-label">身份</label>
+                <div class="layui-form-item move">
+                    <label class="layui-form-label bt">身份</label>
                     <div class="layui-input-block">
                         <select name="type" lay-verify="required" id="user_type">
                             <option value="">请选择</option>
@@ -35,14 +61,14 @@
                     </div>
                 </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">密码</label>
+                <div class="layui-form-item move">
+                    <label class="layui-form-label bt">密码</label>
                     <div class="layui-input-block">
-                        <input type="text" id="password" name="password" onkeyup="value=value.replace(/[\W]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))" class="layui-input" lay-verify="password">
+                        <input type="text" id="password" name="password" onkeyup="value=value.replace(/[\W]/g,'') " onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))" class="layui-input" lay-verify="password">
                     </div>
                 </div>
         
-                <div class="layui-form-item">
+                <div class="layui-form-item move">
                     <div class="layui-input-block">
                         <button class="layui-btn " lay-submit lay-filter="formSub">立即提交</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -50,6 +76,7 @@
                 </div>
 
         </form>
+    </div>
 <!--引入layui文件-->
 <script src="../static/layui.all.js"></script>
 <script>
@@ -81,7 +108,6 @@
             }
         } 
         form.render('select');
-
         //监听提交
         form.on('submit(formSub)',function(data) {
             //获取所有表单数据
@@ -93,7 +119,7 @@
                     id:data1.id,
                     name: data.field.name,
                     type: data.field.type,
-                    password: data.field.password,
+                    password: data.field.password
                 },
                 success : function () {
                     storage.setItem("iframedata",dd);
@@ -102,7 +128,7 @@
                     layer.msg("编辑成功");
                     },
                 error : function(){layer.msg("编辑失败")}
-            })
+            });
             return false;
         });
      localStorage.clear();

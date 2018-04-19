@@ -31,6 +31,8 @@ urlpatterns = [
     url(r'^api/form', views.form),
 
     url(r'^home', views.home),
+    url(r'^$', views.home),
+
     url(r'^submit', views.submit),
     url(r'^data', views.data),
     url(r'^edit/editUser', views.editUser),

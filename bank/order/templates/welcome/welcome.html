@@ -4,31 +4,81 @@
     <meta charset="utf-8">
     <title>carousel模块快速使用</title>
     <link rel="stylesheet" href="../static/css/layui.css" media="all">
+    <link rel="stylesheet" href = "https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .wel_bottom{
+            display: -webkit-flex; 
+            display:flex;
+            align-items:center;
+            justify-content: center;
+            width:100%;
+            height:100px;
+        }
+        .wei_bottom_p_one{
+            display: inline;
+            font-size: 30px;
+            color: darkslategrey;
+            margin:0 13px 0 0;
+        }
+        .wei_bottom_p_two{
+            display: inline;
+            font-size: 30px;
+            color: darkslategrey
+        }
+        legend{
+            margin-left: 334px;
+        }
+    </style>
 </head>
 <body>
+    <fieldset class="layui-elem-field layui-field-title">
+            <legend>
+        <div class="wel_bottom" onmouseover="mouseover()">
+            <div class="wei_bottom_two animated wobble ">
+                <p class="wei_bottom_p_one">Welcome to</p><pre></pre>
+            </div>
+            <div class="wei_bottom_two animated wobble ">
+                <p class="wei_bottom_p_two">Bank-Manage</p>
+            </div>
+        </div>
+    </legend>
+    </fieldset>
 
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-    <legend>Welcome</legend>
-</fieldset>
-
-<div class="layui-carousel" id="test1" lay-filter="test1">
-    <div carousel-item="">
-        <div>条目1</div>
-        <div>条目2</div>
-        <div>条目3</div>
-        <div>条目4</div>
-        <div>条目5</div>
-    </div>
-</div>
+        <div class="layui-carousel" id="test1">
+                <div carousel-item>
+                  <div><img src="/static/img/lunbo_one.jpg"/></div>
+                  <div><img src="/static/img/lunbo_two.jpg"/></div>
+                  <div><img src="/static/img/lunbo_three.jpg"/></div>
+                  <div><img src="/static/img/lunbo_four.jpg"/></div>
+                  <div><img src="/static/img/lunbo_five.jpg"/></div>
+                </div>
+        </div>
 <script src="../static/layui.all.js"></script>
 <script>
-        var carousel = layui.carousel;
-        //建造实例
-        //常规轮播
-        carousel.render({
-            elem: '#test1'
-            ,arrow: 'always'
-        });
+        var $ = layui.$;
+        layui.use('carousel', function(){
+            var carousel = layui.carousel;
+            //建造实例
+            carousel.render({
+                elem: '#test1'
+                ,width: '100%' //设置容器宽度
+                ,arrow: 'always' //始终显示箭头
+                //,anim: 'updown' //切换动画方式
+                ,interval:2500
+                ,height:'340px'
+             });
+            });
+
+        var mouseover = function (){
+            $('.wel_bottom').mouseover(function(){
+                
+                $('.wel_bottom').addClass('animated bounceIn');
+            });
+        }
 </script>
 </body>
 </html>

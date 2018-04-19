@@ -25,7 +25,7 @@ SECRET_KEY = 'dt1-r9d)ne(#jm6+y0)jxs#t1j@u6yynjn2*h6di1xz##@n(ku'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -74,14 +74,20 @@ WSGI_APPLICATION = 'bank.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'bank_db',
+#         'USER':'root',
+#         'PASSWORD':'2211smm..',
+#         'HOST':'localhost',
+#         'PORT':'3306',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bank',
-        'USER': 'root',
-        'PASSWORD': 'passwd',
-        'PORT': 3306,
-        'CHARSET': 'utf8',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
