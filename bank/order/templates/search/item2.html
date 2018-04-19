@@ -68,13 +68,12 @@
                 storage.setItem("data",d);
                 layer.open({
                     type:2,
-                    area:['400px','520px'],
+                    area:['400px','500px'],
                     maxmin: true,
                     shadeClose:true,
                     content:'../search/tab.html',
                     success:function(layero,index){
-                        var d=JSON.stringify(data);
-                        storage.setItem("data",d);
+
                     },
                    end:function()
                         {
@@ -89,7 +88,7 @@
                                 })
                             }
                             else{
-                                layer.alert("没有接收到数据");
+                                layer.alert("提交失败");
                             }                
                         }
                 });

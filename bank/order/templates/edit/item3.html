@@ -8,18 +8,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="../static/css/layui.css"  media="all">
   <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+  <style>
+      .demoTable{
+          width: 100%;
+          position: relative;
+          margin-left:4px;
+          margin-top:4px;
+      }
+      .layui-btn-normal{
+          background-color: rgb(118, 114, 143);
+      }
+      .layui-table-view {
+            margin: 5px 0 0 4px;
+    }
+  </style>
 </head>
 <body>
     <div class="layui-btn-group demoTable">
-      <!-- <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
-      <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
-      <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
-      <button class="layui-btn" data-type="addData" id="add">增加用户</button>
-    </div>
-    <div style="margin:10px">
-    <table id="demo" lay-filter="test"></table>
+        <!-- <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
+        <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+        <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
+        <button class="layui-btn layui-btn-normal data-type=addData" id="add">增加用户</button>
     </div>
 
+    <div>
+    <table id="demo" lay-filter="test"></table>
+    </div>
     <script type="text/html" id="barDemo">
       <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" id="removeUser">删除</a>
       <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit" id="editUser">编辑</a>
@@ -28,158 +42,147 @@
     <script src="../static/layui.all.js"></script>
     <script type="text/javascript">
         var $ = layui.$;
-        var table=layui.table;
+        var table = layui.table;
         var layer = layui.layer;
-        var form=layui.form;
+        var form = layui.form;
         var table_data = new Array();
+        var storage = window.localStorage;
 
-        document.getElementById("add").onclick = function(){ 
-          $("#add").hide();                     
-              table_data.push({"id":10000,"name":"","type":""})
-              table.render({
-                elem: '#demo',
-                height: 470,
-                cellMinWidth: 100,
-                data:table_data,
-                page: true, //开启分页
-                cols: [[ //表头 
-                 {type:'numbers'}
-                // ,{type: 'checkbox',bar:'#demo'}
-                ,{field: 'name', title: '用户名', width: 200,edit: 'text'} //name
-                ,{field: 'id', title: 'ID', width:200,sort:true}  //lid
-                ,{field: 'type', title: '身份', width:200, sort: true,edit: 'text'}  //money  
-                ,{field: 'password', title: '密码', width:300, sort: true,edit: 'text'}          
-                ,{fixed: 'right',width:110,toolbar:'#barDemo'}
-                ]]
-               });           
-            }
-        table.render({
-            elem: '#demo',
-            height: 470,
-            cellMinWidth: 100,
-            url: '/api/getAll' ,//数据接口
-            data:table_data,
-            id: 'demo',
-            page: true, //开启分页
-            cols: [[ //表头 
-             {type:'numbers'}
-            // ,{type: 'checkbox',bar:'#demo'}
-            ,{field: 'name', title: '用户名', width: 200,edit: 'text'} //name
-            ,{field: 'id', title: 'ID', width: 200,sort:true}  //lid
-            ,{field: 'type', title: '身份', width:200, sort: true,edit: 'text'}  
-            ,{field: 'password', title: '密码', width:300, sort: true,edit: 'text'}
-            ,{fixed: 'right',width:110,toolbar:'#barDemo'}
-            ]]
-        });
+        $('#add').click(function() {
+            layer.open({
+                    title:'添加信息',
+                    type:2,
+                    area:['400px','520px'],
+                    maxmin: true,
+                    shadeClose:true,
+                    content:'../edit/addu.html',
+                    success:function(layero,index){
 
-        //监听单元格编辑
-        table.on('edit(test)', function(obj){
-        var value = obj.value //得到修改后的值
-        ,data = obj.data //得到所在行所有键值
-        ,field = obj.field; //得到字段
-         layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
-       });
-    
-       //监听表格复选框选择
-        table.on('checkbox(test)', function(obj){
-        // console.log(obj)
-       });
+                    },
+                   end:function()
+                        {
+                            var iframedata = JSON.parse(localStorage.getItem("iframedata"));
+                            if(iframedata!=null){
+                                obj.update({
+                                    // id:iframedata.id
+                                    name:iframedata.name
+                                    ,type:iframedata.type
+                                    ,password:iframedata.password
+                                })
+                            }
+                            // else{
+                            //     layer.msg("没有接收到数据");
+                            // }
+                        }
+                });})
+
+            table.render({
+              elem: '#demo',
+              id:"idTest",
+              height: 470,
+              cellMinWidth: 100,
+              skin: 'row ' ,//行边框风格//
+              url: '/api/getUser' ,//数据接口
+              data:table_data,
+              data:[{"id":10000,"name":"12312","type":"普通用户","password":"123123"}],
+              page: true, //开启分页
+              cols: [[ //表头
+               {type:'numbers'}
+              // ,{type: 'checkbox',bar:'#demo'}
+              ,{field: 'id', title: 'ID', width:200,sort:true}  //lid
+              ,{field: 'name', title: '用户名', width: 200} //name
+              ,{field: 'type', title: '身份', width:200, sort: true}  //money
+              ,{field: 'password', title: '密码', width:200, sort: true}
+              ,{width:300,toolbar:'#barDemo'}
+              ]]
+            });
   //监听工具条
         table.on('tool(test)', function(obj){
-    var data = obj.data;
-    if(obj.event === 'del'){
-      layer.confirm('真的删除行么',function(index){
-        obj.del();
-        layer.close(index);        
-        $.ajax({
-                url: "/api/removeUser",
-                type: "POST",                
-                data : {
-                    id: obj.data.id,
-                },
-                success : function () {layer.msg("删除成功")},
-                error : function(){layer.msg("删除失败")}
-            });
-            table.render({
-            elem: '#demo',
-            height: 470,
-            cellMinWidth: 100,
-            url: '/api/getAll' ,//数据接口
-            data:table_data,
-            id: 'demo',
-            page: true, //开启分页
-            cols: [[ //表头 
-             {type:'numbers'}
-            // ,{type: 'checkbox',bar:'#demo'}
-            ,{field: 'name', title: '用户名', width: 200,edit: 'text'} //name
-            ,{field: 'password', title: '密码', width:300, sort: true,edit: 'text'}
-            ,{field: 'id', title: 'ID', width: 200,sort:true}  //lid
-            ,{field: 'type', title: '身份', width:200, sort: true,edit: 'text',selector:'超级管理员'}  //money
-            ,{fixed: 'right',width:110,toolbar:'#barDemo'}
-            ]]
-        });
-      });
-    } 
-  });
-  
-         var $ = layui.$, active = {
-          getCheckData: function(){ //获取选中数据
-            var checkStatus = table.checkStatus('demo')
-             ,data = checkStatus.data;
-            layer.alert(JSON.stringify(data));
-         }
-         ,getCheckLength: function(){ //获取选中数目
-           var checkStatus = table.checkStatus('demo')
-           ,data = checkStatus.data;
-           layer.msg('选中了：'+ data.length + ' 个');
-         }
-         ,isAll: function(){ //验证是否全选
-         var checkStatus = table.checkStatus('demo');
-          layer.msg(checkStatus.isAll ? '全选': '未全选')
-       }
-      };
-      $, active = {
-       reload: function(){
-         var demoReload = $('#demo');
-      //执行重载
-          table.reload('demoReload', {
-           page: {
-             curr: 1 //重新从第 1 页开始
-               }
-           });
-         }
-      };
-  
-     $('.demoTable .layui-btn').on('click', function(){
-         var type = $(this).data('type');
-      active[type] ? active[type].call(this) : '';
-     });   
+        var data = obj.data;
+        var tr = obj.tr; //获得当前行 tr 的DOM对象
 
-    </script>
-<script>
-    table.on('edit(test)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"  
-     
-     if(obj.data.name && obj.data.password && obj.data.type != null){
+        if(obj.event === 'del'){
+          layer.confirm('确认删除？',function(index){
+            layer.close(index);
             $.ajax({
-                url: "/api/setUser",
-                type: "POST",
-                data : {
-                    name: obj.data.name,
-                    password:obj.data.password,
-                    type:obj.data.type
-                },
-                success : function () {
-                    layer.msg("增加成功");
-                    $('#add').show();
-                  },
-                error : function(){layer.msg("增加失败")}
-            })
-            console.log(obj.data)
-    }
-    else if(obj.data.name || obj.data.password || obj.data.type == null){
-      layer.msg("请填写完整信息")
-    };
-});
-</script>
+                    url: "/api/removeUser",
+                    type: "POST",
+                    data : {
+                        id: obj.data.id,
+                    },
+                    success : function (data) {
+                        if(data.status==1){
+                            layer.alert(data.msg);
+                        }
+                        else if(data.status==0){
+                            obj.del();
+                            layer.close(index);
+                            $(".layui-laypage-btn")[0].click();
+                        }
+                        },
+                    error : function(){layer.msg("删除失败")}
+                });
+          });
+        }
+
+        else if (obj.event === 'edit'){
+            var d=JSON.stringify(data);
+            storage.setItem("data",d);
+            layer.open({
+                        title:'修改信息',
+                        type:2,
+                        area:['400px','520px'],
+                        maxmin: true,
+                        shadeClose:true,
+                        content:'../edit/editUser.html',
+                        success:function(layero,index){
+
+                        },
+                   end:function()
+                        {
+                            var iframedata = JSON.parse(localStorage.getItem("iframedata"));
+                            if(iframedata!=null){
+                                obj.update({
+                                     id:iframedata.id
+                                    ,name:iframedata.name
+                                    ,type:iframedata.type
+                                    ,password:iframedata.password
+                                })
+                            }
+                            // else{
+                            //     layer.msg("没有接收到数据");
+                            // }
+                        }
+                });
+        }
+
+        else if (obj.event === 'add'){
+          layer.open({
+                    title:'增加用户',
+                    type:2,
+                    area:['400px','520px'],
+                    maxmin: true,
+                    shadeClose:true,
+                    content:'../edit/addu.html',
+                    success:function(layero,index){ 
+                    },
+                   end:function()
+                        {
+                            var iframedata = JSON.parse(localStorage.getItem("iframedata"));
+                            if(iframedata!=null){
+                                obj.update({
+                                     name:iframedata.name
+                                    ,type:iframedata.type.value
+                                    ,password:iframedata.password
+                                })
+                            }
+                            else{
+                                layer.alert("操作失败");
+                            }
+                        }
+                });
+        }
+      })
+    </script>
 </body>
 </html>

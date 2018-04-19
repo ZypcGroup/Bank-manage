@@ -2,27 +2,42 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>编辑</title>
+    <title>订单信息</title>
     <link rel="stylesheet" href="../static/css/layui.css" media="all">
     <style>
-        form{
-            position: absolute;
-            top:50px;
-            
-        }
-        #top{
-            width: 330px;
-            height: auto;
-            margin:10px;
-
-        }
+    body{
+        background-color:#fffafa;
+    }
+    form{
+        position: absolute;
+        top:50px;     
+    }
+    #top{
+        width: 380px;
+        height: auto;
+        margin: 15px auto ;
+    }
+    .bt{
+        background-color:#e0ffff; 
+        padding:8px 14px 8px 14px;
+        border:1px solid rgb(210,210,210);
+        border-right: 0px;
+    }
+    .ms{
+        box-sizing: border-box;
+        width:380px;
+        border-right: 1px solid rgb(210,210,210);
+        border-bottom: none;
+        text-align: left;
+        padding-left:22px;
+    }
     </style>
 </head>
 <body>
-<div id="top">
+<div id="top" >
 <form class="layui-form" style="margin:0px; position:static">
     <div class="layui-form-item">
-        <label class="layui-form-label">风险类别</label>
+        <label class="layui-form-label bt">风 险 类 别&nbsp</label>
         <div class="layui-input-block">
             <select name="danger" lay-verify="required" id="danger">
                 <option value="">请选择</option>
@@ -43,7 +58,7 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">业务线</label>
+        <label class="layui-form-label bt">业&nbsp&nbsp&nbsp&nbsp务&nbsp&nbsp线&nbsp</label>
         <div class="layui-input-block">
             <select name="thing" lay-verify="required" id="xian" class="layui-form" lay-filter="test1">
                 <option value="">请选择</option>
@@ -56,32 +71,32 @@
         </div>
     </div>
 
+  
     <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">金额</label>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input name="money" placeholder="￥" autocomplete="off" class="layui-input" type="text" lay-verify="required|number" id="money">
-            </div>
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label" type="level">风险评级</label>
+        <label class="layui-form-label bt" type="level">风 险 评 级&nbsp</label>
         <div class="layui-input-block">
             <select name="level" lay-verify="required" class="selector" id="level">
                 <option value="">请选择</option>
                 <option value="一级">一级</option>
-                <option value="二级" id="cnm">二级</option>
+                <option value="二级">二级</option>
                 <option value="三级">三级</option>
                 <option value="四级">四级</option>
                 <option value="五级">五级</option>
             </select>
         </div>
     </div>
+   <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label bt">金&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp额&nbsp</label>
+            <div class="layui-input-inline" >
+                <input name="money" placeholder="￥" autocomplete="off" class="layui-input" type="text" lay-verify="required|number" id="money" style="width:271px">
+            </div>
+        </div>
+    </div>
 
-    <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">描述</label>
-        <div class="layui-input-block">
+    <div class="layui-form-item layui-form-text" >
+        <div class="layui-form-label bt ms" >描&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp述</div>
+        <div class="layui-form-label" style="width:380px;padding:0px;" >
             <textarea name="desc" lay-verify="desc" placeholder="请输入内容" class="layui-textarea" maxlength="255" minlength="1" id="text"></textarea>
         </div>
     </div>
@@ -100,7 +115,8 @@
 
 <script>
     var storage=window.localStorage;
-    var data = JSON.parse(localStorage.getItem("data"));// console.log(data);
+    var datai = JSON.parse(localStorage.getItem("data"));
+    console.log(datai);
     var $ = layui.$;
     var form = layui.form;
     var layer = layui.layer; 
@@ -136,7 +152,7 @@
 
         //监听提交
         form.on('submit(formSub)', function(data){
-            //console.log(data.field);
+            console.log(data.field);
             var dd=JSON.stringify(data.field);
             $.ajax({
             url:"/api/form",
@@ -148,7 +164,7 @@
                 level:data.field.level,
                 money:data.field.money,
                 desc:data.field.desc,
-                lid:data.field.lid
+                id:datai.lid
                 },
             success:function(data){
                 storage.setItem("iframedata",dd);
@@ -164,6 +180,7 @@
             return false;
         });
 localStorage.clear();
+
 </script>
 
 </body>
