@@ -20,20 +20,36 @@ from order import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/csSetUser/',views.csSetUser),
-    url(r'^api/csGetUser/', views.csGetUser),
-    url(r'^api/csRemoveUser/', views.csRemoveUser),
-    url(r'^api/csForm/', views.csForm),
+    # url(r'^api/csSetUser/',views.csSetUser),
+    # url(r'^api/csGetUser/', views.csGetUser),
+    # url(r'^api/csRemoveUser/', views.csRemoveUser),
+    # url(r'^api/csForm/', views.csForm),
 
     url(r'^api/getUser', views.getUser),
     url(r'^api/setUser', views.setUser),
     url(r'^api/removeUser', views.removeUser),
     url(r'^api/form', views.form),
-#################################################################################
-    url(r'^index/', views.login),
-    url(r'^api/login/', views.api_login),
-    url(r'^api/check/', views.api_check),
-    url(r'^frame/home/', views.home),
-    url(r'^api/logout/', views.logout),
-    url(r'api/getAll', views.api_getall),
+
+    url(r'^home', views.home),
+    url(r'^$', views.home),
+
+    url(r'^submit', views.submit),
+    url(r'^data', views.data),
+    url(r'^edit/editUser', views.editUser),
+    url(r'^edit/addu', views.editu),
+
+    url(r'^edit', views.edit),
+    url(r'^welcome', views.welcome),
+    url(r'^search/tab', views.tab),
+
+    url(r'^search', views.search),
+
+    url(r'^login/', views.api_login),
+    url(r'^index/', views.api_login),
+    url(r'^api/login', views.api_login),
+    url(r'^api/check', views.api_check),
+    url(r'^api/logout', views.logout),
+    url(r'^api/getAll', views.api_getall),
+    url(r'^cs', views.cs),
+
 ]

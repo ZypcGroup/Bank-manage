@@ -10,7 +10,7 @@ class User(models.Model):
         return self.name
     #self.后边的参数必须是char类型的
 
-.0
+
 class List(models.Model):
     lid = models.AutoField(primary_key=True)
     danger = models.CharField(max_length=255)

@@ -5,44 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>银行管理系统</title>
     <link rel="stylesheet" href="../static/css/layui.css">
-    <!--<script src="../static/jquery-3.2.1.js"></script>-->
     <style>
         .left_nav{
             position: relative;
             left: 40px;
         }
+        .layui-body {
+            top: 60px;
+        }
     </style>
 </head>
 <body class="layui-layout-body">
-<div class="layui-layout layui-layout-admin">
+    <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe62e;</i>  </div>
-
+        <div class="layui-logo"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe62e;</i></div>
         <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item" id="username">
-                <a href="javascript:;">
-                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-
+            <li class="layui-nav-item">
+                <a href="javascript:;"  id="username">
+                
                 </a>
             </li>
-            <li class="layui-nav-item"><a href="../login/index.html">退出登录</a></li>
+            <li class="layui-nav-item"><a href="/api/logout" id="exit">退出登录</a></li>
         </ul>
     </div>
 
     <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree  layui-bg-cyan "  lay-filter="test">
-                <li class="layui-nav-item layui-nav-itemed layui-this">
-                    <a href="../submit/submit.html" target="menuFrame" class="left_navbar"><i class="layui-icon" style="font-size: 20px; color: #dddddd;position: relative;left: 20px;top: 1px;">&#xe63c;</i><span class="left_nav">表单模块</span></a>
+            <ul class="layui-nav layui-nav-tree  layui-bg-cyan "  lay-filter="">
+                <li class="layui-nav-item layui-nav-itemed layui-this li_height">
+                    <a href="../submit/submit.html" target="menuFrame" class="left_navbar"><i class="layui-icon" style="font-size: 20px; color: #dddddd;position: relative;left: 20px;top: 1px;">&#xe63c;</i><span class="left_nav">增加表单</span></a>
                 </li>
-                <li class="layui-nav-item layui-nav-itemed" id="search">
-                    <a href="../search/item2.html" target="menuFrame" class="left_navbar"><i class="layui-icon" style="font-size: 20px; color: #dddddd;position: relative;left: 20px;top: 1px;">&#xe615;</i><span class="left_nav">查询模块</span></a>
+                <li class="layui-nav-item layui-nav-itemed li_height" id="search">
+                    <a href="../search/item2.html" target="menuFrame" class="left_navbar"><i class="layui-icon" style="font-size: 20px; color: #dddddd;position: relative;left: 20px;top: 1px;">&#xe615;</i><span class="left_nav">查询数据</span></a>
                 </li>
-                <li class="layui-nav-item layui-nav-itemed" id="edit_user">
-                    <a href="../edit/item3.html" target="menuFrame" class="left_navbar"><i class="layui-icon" style="font-size: 20px; color: #dddddd;position: relative;left: 20px;top: 1px;">&#xe620;</i><span class="left_nav">设置模块</span></a>
+                <li class="layui-nav-item layui-nav-itemed li_height" id="edit_user">
+                    <a href="../edit/item3.html" target="menuFrame" class="left_navbar"><i class="layui-icon" style="font-size: 20px; color: #dddddd;position: relative;left: 20px;top: 1px;">&#xe620;</i><span class="left_nav">后台设置</span></a>
                 </li>
-                <li class="layui-nav-item layui-nav-itemed">
+                <li class="layui-nav-item layui-nav-itemed li_height">
                     <a href="../data/item4.html" target="menuFrame" class="left_navbar"><i class="layui-icon" style="font-size: 20px; color: #dddddd;position: relative;left: 20px;top: 1px;">&#xe609;</i><span class="left_nav">数据导出</span></a>
                 </li>
             </ul>
@@ -54,10 +54,10 @@
     </div>
 
     <div class="layui-footer">
-        <!-- 底部固定区域 -->
-        © layui.com - 底部固定区域
+        @智邮普创工作室  
+        <a href="https://zypc.xupt.edu.cn/" style="margin: 0 20px;background-color: #dedcdc">官方网站</a>
+        <a href="#" style="margin: 0 20px;background-color: #dedcdc">Github</a>
     </div>
-
 </div>
 
 <script src="../static/layui.all.js"></script>
@@ -68,12 +68,14 @@
             url: "/api/check",
             type: "POST",
             data : {},
-            success : function () {
+            success : function (data) {
+                if (data.data.type == "User" ){
+                    $("#edit_user").hide();
+                }
                 document.getElementById("username").innerHTML = data.data.username;
-                console.log(data.data.username)
-            }
+            },
+            error : function(){layer.msg("获取用户信息失败")}                
         });
-
 </script>
 </body>
 </html>
